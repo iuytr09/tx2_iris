@@ -1,0 +1,44 @@
+<RCC>
+    <qresource prefix="/">
+        <file>image/back1.jpg</file>
+        <file>image/back2.jpg</file>
+        <file>image/back3.jpg</file>
+        <file>image/帮助.png</file>
+        <file>image/导出.png</file>
+        <file>image/导入.png</file>
+        <file>image/返回.png</file>
+        <file>image/返回 (1).png</file>
+        <file>image/关机.png</file>
+        <file>image/关机 (1).png</file>
+        <file>image/虹膜识别.png</file>
+        <file>image/人员管理.png</file>
+        <file>image/删  除.png</file>
+        <file>image/数据管理.png</file>
+        <file>image/添加.png</file>
+        <file>image/系统.png</file>
+        <file>image/系统管理.png</file>
+        <file>image/修改.png</file>
+        <file>image/重启.png</file>
+        <file>image/重启 (1).png</file>
+        <file>image/重启 (2).png</file>
+        <file>image/关 闭.png</file>
+        <file>image/eye.jpg</file>
+        <file>image/eye3.jpg</file>
+        <file>image/eye12.jpg</file>
+        <file>image/保存.png</file>
+        <file>image/查找.png</file>
+        <file>image/登录.png</file>
+        <file>image/登录 (2).png</file>
+        <file>image/虹膜识别 (1).png</file>
+        <file>image/人脸登录 (1).png</file>
+        <file>image/上.png</file>
+        <file>image/下.png</file>
+        <file>image/开始.png</file>
+        <file>image/停止.png</file>
+        <file>image/背景.jpg</file>
+        <file>image/第一页 (1).png</file>
+        <file>image/第一页 (3).png</file>
+        <file>image/上一页.png</file>
+        <file>image/下一页.png</file>
+    </qresource>
+</RCC>
