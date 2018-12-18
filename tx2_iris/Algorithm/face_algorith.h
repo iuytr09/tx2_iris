@@ -54,7 +54,7 @@ private:
 
 signals:
     sigEnrollSuccess(int state,std::vector<float> &face_box, cv::Mat &out_face);
-
+    sigIdentSuccess(int state, std::vector<std::vector<float>>, cv::Mat &out_face);
 public slots:
 
 private:

@@ -27,20 +27,9 @@ public:
 
     void  Push(cv::Mat im){
         QMutexLocker locker(&_face_mutex);
-        _ims.clear();
-        _ims.push_back(im);
-    }
+        _im = im;
+        _isReady = true;
 
-    cv::Mat GetIM(){
-        QMutexLocker locker(&_face_mutex);
-        cv::Mat im= _ims.front();
-        _ims.pop_front();
-        return  im;
-    }
-
-  void ClearIM(){
-        QMutexLocker locker(&_face_mutex);
-        _ims.clear();
     }
 
   inline void SetState(FaceState s){
@@ -54,6 +43,7 @@ public:
     inline bool GetRuning(){
         return _isruning;
     }
+    void Run();
 
 private:
     static void * FaceThread(void* arg); //上传图片数据线程
@@ -63,9 +53,10 @@ public slots:
 
 private:
     bool _isruning;
+    bool _isReady;
     FaceState _fs;
     std::thread _eid;
-    QVector<cv::Mat> _ims;
+    cv::Mat _im;
     QMutex _face_mutex;//实例互斥锁。
     Face_Algorith* am;
 };

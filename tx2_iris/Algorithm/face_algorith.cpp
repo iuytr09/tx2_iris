@@ -57,6 +57,7 @@ bool Face_Algorith::SaveFeature(std::vector<float> &feat,cv::Mat im,cv::Mat reg_
 
     _pFaceDataModel->insertRecord(-1, record);
     bool isok =_pFaceDataModel->submitAll();
+    _vfaceExist.push_back(feat);
 
     _imagemanager.SaveFaceImage(_user.id,im,reg_face);
 
@@ -76,11 +77,11 @@ void Face_Algorith::Identify(){
     }
 }
 
-  void Face_Algorith::UpdateImage(cv::Mat im){
-      if(_pfaceWorker!=NULL){
-          _pfaceWorker->Push(im);
-      }
-  }
+void Face_Algorith::UpdateImage(cv::Mat im){
+    if(_pfaceWorker!=NULL){
+        _pfaceWorker->Push(im);
+    }
+}
 
 
 //void Face_Algorith::LoginIdentify(cv::Mat im){
@@ -90,6 +91,7 @@ void Face_Algorith::Identify(){
 //    //     int extract_feature(const cv::Mat &image, std::vector<float> &fbox, std::vector<float> &feat, float hackness_thr = 0.2);
 //    //float get_score(const float* feat_1, const float* feat_2);
 //}
+
 
 void Face_Algorith::Enroll(){
 
@@ -103,7 +105,7 @@ void Face_Algorith::CodeCompare(std::vector<float> source){
     QSqlRecord record;
     for(int i=0;i<_pFaceDataModel->rowCount();i++){
         double dtemp=1.0;
-        //        QSqlRecord recordtemp= _pFaceDataModel->record(i);
+        QSqlRecord recordtemp= _pFaceDataModel->record(i);
         //        // std::vector<float> codeExist;
         //        QByteArray datatemple=recordtemp.value("feat").to;
         //codeExist->nLength = datatemple.length();
@@ -113,23 +115,18 @@ void Face_Algorith::CodeCompare(std::vector<float> source){
         if(dtemp<dDist)
         {
             dDist = dtemp;
-            //record = recordtemp;
+            record = recordtemp;
         }
     }
 
-    //     if(dDist<0.32){
-    //         //匹配成功
-    //         //record  匹配结果
-    //         _recogUser.id = record.value("uid").toInt();
-    //         _recogUser.name = record.value("name").toString();
-    //         _recogUser.depart_name = record.value("depart_name").toString();
-    //         emit sigIdentifySuccess(PromptFlag::IRIS_SUCCESS);
+    if(dDist<0.32){
+        //匹配成功
+        _user.id = record.value("uid").toInt();
+        _user.name = record.value("name").toString();
+        _user.depart_name = record.value("depart_name").toString();
+        emit sigIdentSuccess(0,NULL,NULL);//识别成功！
+    }else{
+        emit sigIdentSuccess(-9,NULL,NULL);//识别失败！
 
-
-    //     }else{
-    //         emit sigIdentifySuccess(PromptFlag::IRIS_FAIL);
-
-    //     }
-
-
+    }
 }

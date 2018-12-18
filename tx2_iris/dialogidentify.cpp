@@ -257,7 +257,7 @@ void DialogIdentify::timerEvent(QTimerEvent *event)
 }
 
 
-
+int count=1;
 /*****************************************************************************
 *                         注册模块将采集到的图像显示到界面
 *  函 数 名：ImageUpdate
@@ -276,7 +276,12 @@ void DialogIdentify::slotImageUpdate(cv::Mat im)
     if(!im.empty())
     {
 
-        _pFaceAlgorith->UpdateImage(im);
+        if(count%10==0){
+            _pFaceAlgorith->UpdateImage(im);
+            count=0;
+        }
+        count++;
+
         QImage frame = cvMat2QImage(im);
         ui->labelFace->setPixmap(QPixmap::fromImage(frame));
         //_count ++;
