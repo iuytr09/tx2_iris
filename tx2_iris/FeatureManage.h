@@ -34,8 +34,10 @@ enum FeatureFlag
 };
 
 //设置路径
-#define APPEnrImagePath ("./IrisPath/EnrollImage/Eye")
+#define APPIrisImagePath ("./IrisPath/EnrollImage/Eye")
+#define APPFaceImagePath ("./FacePath/EnrollImage/Eye")
 
+//xie cheng dan li
 
 //临时特征管理类
 class FeatureManage
@@ -47,8 +49,11 @@ public:
     void InitParam();   //初始化参数
     std::vector<cv::Mat> GetImage();//载入特征
     void SaveImage(int uid, int serialnum, cv::Mat im);//向特征内存中增加一个特征
+    void SaveFaceImage(int uid,cv::Mat im,cv::Mat reg_face);
 private:
-    char ImagesName[1024];
+    char _irisImagesName[128];
+    char _faceImagesOriName[128];
+    char _faceImagesRegName[128];
 };
 
 

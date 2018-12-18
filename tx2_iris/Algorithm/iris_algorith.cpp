@@ -45,10 +45,6 @@ IRIS_Algorith* IRIS_Algorith::_alg_instance = NULL;
 *****************************************************************************/
 IRIS_Algorith::IRIS_Algorith():_isOK(false),_isSetPerson(false)
 {
-    //    _pJD_IRIS = new JD_IRIS();
-    //    JD_IRIS_ACINFO acInfo;
-    //    _pJD_IRIS = _pJD_IRIS->JD_IRIS_Create(acInfo);
-
     if(createConnection(NULL))      //创建数据库连接
     {
 
@@ -63,8 +59,6 @@ IRIS_Algorith::IRIS_Algorith():_isOK(false),_isSetPerson(false)
             //1,授权成功
             stINITSTRUCT initPara;
             initPara.emCodeFunChoice = IRIS_CODE_METHOD1;
-            //        initPara.strModelDir = "";
-            //        initPara.strParaDir ="";
             initPara.nCPUGPU = 0;
             strncpy(initPara.strParaDir, "/home/nvidia/work/JD_IRIS_API/para", GBMaxFileNameLen);
             strncpy(initPara.strModelDir, "/home/nvidia/work/JD_IRIS_API/models-enc", GBMaxFileNameLen);
@@ -97,6 +91,8 @@ IRIS_Algorith::IRIS_Algorith():_isOK(false),_isSetPerson(false)
                 _err= getError(nStatus);
             }
         }
+    }else{
+        _err = "创建数据库连接失败!";
     }
 }
 
@@ -181,23 +177,27 @@ QString IRIS_Algorith::getError(int status){
  * @param size
  */
 void IRIS_Algorith::setIndentCount(int size){
-    if(_vIdentWorkers.size()>0){
-        int count = _vIdentWorkers.size();
-        for(int i=0;i<count;i++){
-            IdentWorker *e = _vIdentWorkers.front();
-            _vIdentWorkers.pop_front();
-            delete e;
-            e=NULL;
+
+    if(_isOK){
+        if(_vIdentWorkers.size()>0){
+            int count = _vIdentWorkers.size();
+            for(int i=0;i<count;i++){
+                IdentWorker *e = _vIdentWorkers.front();
+                _vIdentWorkers.pop_front();
+                delete e;
+                e=NULL;
+            }
+        }
+
+        _iWorkSize = size;
+        _curIIndex =0;
+        for(int i=0;i<size;i++){
+            IdentWorker * e = new IdentWorker();
+
+            _vIdentWorkers.push_back(e);
         }
     }
 
-    _iWorkSize = size;
-    _curIIndex =0;
-    for(int i=0;i<size;i++){
-        IdentWorker * e = new IdentWorker();
-
-        _vIdentWorkers.push_back(e);
-    }
 }
 /*****************************************************************************
 *                        函数
@@ -212,22 +212,23 @@ void IRIS_Algorith::setIndentCount(int size){
 *  修改时间：
 *****************************************************************************/
 void IRIS_Algorith::setEnrollCount(int size){
-
-    if(_vEnrollworkers.size()>0){
-        int count = _vEnrollworkers.size();
-        for(int i=0;i<count;i++){
-            EnrollWorker *e = _vEnrollworkers.front();
-            _vEnrollworkers.pop_front();
-            delete e;
-            e=NULL;
+    if(_isOK){
+        if(_vEnrollworkers.size()>0){
+            int count = _vEnrollworkers.size();
+            for(int i=0;i<count;i++){
+                EnrollWorker *e = _vEnrollworkers.front();
+                _vEnrollworkers.pop_front();
+                delete e;
+                e=NULL;
+            }
         }
-    }
 
-    _eWorkSize = size;
-    _curEIndex =0;
-    for(int i=0;i<size;i++){
-        EnrollWorker * e = new EnrollWorker();
-        _vEnrollworkers.push_back(e);
+        _eWorkSize = size;
+        _curEIndex =0;
+        for(int i=0;i<size;i++){
+            EnrollWorker * e = new EnrollWorker();
+            _vEnrollworkers.push_back(e);
+        }
     }
 }
 

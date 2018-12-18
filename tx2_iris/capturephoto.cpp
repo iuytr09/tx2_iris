@@ -48,55 +48,55 @@
 
 //FacePhotoEvent faceEvent;
 
-///*****************************************************************************
-//*                        人脸图像采集处理函数
-//*  函 数 名：GetFacePhoto
-//*  功    能：调用人脸采集图像接口，采集到图像后发射信号，供图像处理类使用
-//*  说    明：
-//*  参    数：
-//*  返 回 值：
-//*  创 建 人：liuzhch
-//*  创建时间：2018-10-20
-//*  修 改 人：
-//*  修改时间：
-//*****************************************************************************/
-void *GetFacePhoto(void* arg)
-{
-    //TO DO
-    if(NULL == arg)
-    {
-        return (void *)0;
-    }
+/////*****************************************************************************
+////*                        人脸图像采集处理函数
+////*  函 数 名：GetFacePhoto
+////*  功    能：调用人脸采集图像接口，采集到图像后发射信号，供图像处理类使用
+////*  说    明：
+////*  参    数：
+////*  返 回 值：
+////*  创 建 人：liuzhch
+////*  创建时间：2018-10-20
+////*  修 改 人：
+////*  修改时间：
+////*****************************************************************************/
+//void *GetFacePhoto(void* arg)
+//{
+//    //TO DO
+//    if(NULL == arg)
+//    {
+//        return (void *)0;
+//    }
 
-    CapturePhoto* cp = static_cast<CapturePhoto *>(arg);
+//    CapturePhoto* cp = static_cast<CapturePhoto *>(arg);
 
-    VideoCapture cap;
-    if(!cap.open(1))
-    {
-        cp->_stop=true;
-        return -1;
-    }
-    Mat frame;
+//    VideoCapture cap;
+//    if(!cap.open(1))
+//    {
+//        cp->_stop=true;
+//        return -1;
+//    }
+//    Mat frame;
 
-    cp->_stop = false;
-    while (!cp->_stop)
-    {
-        cap >> frame;
-        QImage im = cvMat2QImage(frame);
-//        emit cp->sigUpdateImage(im);
-        cp->slotGetFaceImage(im);
-        usleep(30);
-    }
-    cap.release();
+//    cp->_stop = false;
+//    while (!cp->_stop)
+//    {
+//        cap >> frame;
+//        QImage im = cvMat2QImage(frame);
+////        emit cp->sigUpdateImage(im);
+//        cp->slotGetFaceImage(im);
+//        usleep(30);
+//    }
+//    cap.release();
 
 
-    return (void*)0;
-}
+//    return (void*)0;
+//}
 
 CapturePhoto::CapturePhoto(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::CapturePhoto),
-    _stop(true)
+    ui(new Ui::CapturePhoto)//,
+    //_stop(true)
 {
     ui->setupUi(this);
 
@@ -125,15 +125,15 @@ bool CapturePhoto::setFileNameInfo(QString personInfo)
     return true;
 }
 
-bool CapturePhoto::initCamera()
-{
-    if(_stop){
-        pthread_create(&thrID, NULL, GetFacePhoto, this);
-    }
-    return true;
-}
+//bool CapturePhoto::initCamera()
+//{
+//    if(_stop){
+//        pthread_create(&thrID, NULL, GetFacePhoto, this);
+//    }
+//    return true;
+//}
 
-void CapturePhoto::slotGetFaceImage(QImage img)
+void CapturePhoto::SetFaceImage(QImage img)
 {
     if (!img.isNull()){
         ui->labFaceImageStream->setPixmap(QPixmap::fromImage(img, Qt::AutoColor));
@@ -155,7 +155,7 @@ void CapturePhoto::slotGetFaceImage(QImage img)
 void CapturePhoto::slotBack()
 {
     //TO DO
-    stopCapturing();
+   // stopCapturing();
     close();
 }
 
@@ -174,15 +174,15 @@ void CapturePhoto::slotBack()
 void CapturePhoto::slotSave()
 {
     //TO DO
-    stopCapturing();
+   // stopCapturing();
     //关闭当前窗口
     close();
 }
 
 
-void CapturePhoto::stopCapturing()
-{
-    _stop= true;
-    void *rtn_status;
-    pthread_join(thrID, &rtn_status);
-}
+//void CapturePhoto::stopCapturing()
+//{
+//    _stop= true;
+//    void *rtn_status;
+//    pthread_join(thrID, &rtn_status);
+//}

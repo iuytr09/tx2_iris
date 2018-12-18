@@ -568,7 +568,7 @@
         </font>
        </property>
        <property name="text">
-        <string>采集</string>
+        <string>renlian采集</string>
        </property>
        <property name="icon">
         <iconset>

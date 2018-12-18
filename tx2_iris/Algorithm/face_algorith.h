@@ -5,7 +5,9 @@
 #include<QMutexLocker>
 #include<QSqlTableModel>
 #include "Common/common.h"
+#include "FeatureManage.h"
 #include "../jdFace_sdk_2.0.0/visi_face.h"
+#include "Worker/faceworker.h"
 
 class Face_Algorith : public QObject
 {
@@ -40,14 +42,18 @@ public:
     }
 
 
-    void Identify(cv::Mat im);
-    void LoginIdentify(cv::Mat im);
-    void Enroll(cv::Mat im);
+    void Identify();
+   // void LoginIdentify();
+    void UpdateImage(cv::Mat im);
+    void Enroll();
+    void CodeCompare(std::vector<float> source);
+    bool SaveFeature(std::vector<float> &feat, cv::Mat im, Mat reg_face);
+
 private:
-    bool saveFeature(std::vector<float> &feat,cv::Mat im);
-    void codeCompare(std::vector<float> source);
+
+
 signals:
-    sigEnrollSuccess(int);
+    sigEnrollSuccess(int state,std::vector<float> &face_box, cv::Mat &out_face);
 
 public slots:
 
@@ -55,23 +61,18 @@ private:
     int _statue;
     PersonInfo _user;
     QSqlTableModel *_pFaceDataModel;
-     std::vector<std::vector<float>> _vfaceExist;
+    std::vector<std::vector<float>> _vfaceExist;
     bool _isSetPerson;
 
+    FeatureManage  _imagemanager;
+
+    FaceWorker * _pfaceWorker;
     QMutex _save_im_mutex;//实例互斥锁。
     static QMutex _face_alg_mutex;//实例互斥锁。
     static Face_Algorith *_face_alg_instance;/*!<使用原子指针,默认初始化为0。*/
 
 
-//    QVector<EnrollWorker*> _vEnrollworkers;
-//    int _eWorkSize;
-//    int _curEIndex;
-//    bool _isEnrollStop;
 
-//    QVector<IdentWorker*> _vIdentWorkers;
-//    int _iWorkSize;
-//    int _curIIndex;
-//    bool _isIdentStop;
 };
 
 #endif // FACE_ALGORITH_H

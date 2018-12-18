@@ -37,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     qRegisterMetaType<cv::Mat> ("cv::Mat");
     qRegisterMetaType<PersonInfo> ("PersonInfo");
+
     //隐藏标题栏
     // setWindowFlags(Qt::CustomizeWindowHint);
 
@@ -50,15 +51,17 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //隐藏工具栏
     //ui->mainToolBar->hide();
-
-    //_pFaceAlgorith = Face_Algorith::GetInstance();
+    _pFaceAlgorith =Face_Algorith::GetInstance();
     _pAlgorith = IRIS_Algorith::GetInstance();
-    _pAlgorith->setIndentCount(5);
-    _pAlgorith->setEnrollCount(5);
+    _pAlgorith->setIndentCount(1);
+    _pAlgorith->setEnrollCount(1);
 
     //connect(_pAlgorith,SIGNAL(sigEnrollSuccess(bool)),this,SLOT(iris_enroll_success(PersonInfo)));
 
     _pIrisVideo =IrisVideo::GetInstance();
+
+    IrisVideo::GetInstance()->Run();
+
     //hong mo she xiang tou
     connect(_pIrisVideo,SIGNAL(sigFramed(cv::Mat)),this,SLOT(iris_image(cv::Mat)));
 
@@ -151,10 +154,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(&drawEvent,SIGNAL(sigDrawIdent(cv::Mat)),this,SLOT(face_image(cv::Mat)));
 
-    _capImgThread = std::thread(CapImgThread, (void*)this);
 
-    IrisVideo::GetInstance()->Run();
-    //connect(IrisVideo::GetInstance(),SIGNAL(sigFramed(cv::Mat)),this,SLOT(iris_image(cv::Mat)));
 
 }
 
@@ -166,7 +166,6 @@ void MainWindow::iris_ident_success(PersonInfo p){
 
 MainWindow::~MainWindow()
 {  
-    _capImgThread.join();
     delete ui;
 
     delete _ident;
@@ -225,51 +224,52 @@ void MainWindow::iris_image(cv::Mat im){
 
 }
 
-void MainWindow::face_image(cv::Mat im){
-    if(!im.empty())
-    {
+//void MainWindow::face_image(cv::Mat im){
+//    if(!im.empty())
+//    {
 
 //        if(_currentPage == IdentityPage){
 //            _pFaceAlgorith->Identify(im);
 
 //        }else if(_currentPage ==PersonPage){
-//            _pFaceAlgorith->Enroll(im);
+//            //_pFaceAlgorith->Enroll(im);
+//             //_personManage->GetEnroll()->
 
 //        }else if(_currentPage==IrisLoginPage){
 
 //        }else{
 //            //qi ta
-       // }
-        QImage frame = cvMat2QImage(im);
-        //ren lian luo ji
-        //to do
-        ImageUpdate(frame);
-    }
+//        }
+//        QImage frame = cvMat2QImage(im);
+//        //ren lian luo ji
+//        //to do
+//        ImageUpdate(frame);
+//    }
 
 
-}
+//}
 
-void MainWindow::ImageUpdate(QImage im)
-{
-    if(!im.isNull())
-    {
-        if(_currentPage == IdentityPage){
-            _ident->ImageUpdate(im);
+//void MainWindow::ImageUpdate(QImage im)
+//{
+//    if(!im.isNull())
+//    {
+//        if(_currentPage == IdentityPage){
+//            _ident->ImageUpdate(im);
 
-        }else if(_currentPage ==PersonPage){
-            _personManage->GetEnroll()->CapImageUpdate(im);
+//        }else if(_currentPage ==PersonPage){
+//            _personManage->GetEnroll()->CapImageUpdate(im);
 
-        }else if(_currentPage==IrisLoginPage){
+//        }else if(_currentPage==IrisLoginPage){
 
-        }else{
-            //qi ta
-        }
-    }
-}
+//        }else{
+//            //qi ta
+//        }
+//    }
+//}
 
-//  ren lian
-void* MainWindow::CapImgThread(void* arg)
-{
+////  ren lian
+//void* MainWindow::CapImgThread(void* arg)
+//{
 //    VideoCapture cap;
 //    if(!cap.open(0))
 //    {
@@ -292,8 +292,8 @@ void* MainWindow::CapImgThread(void* arg)
 //        drawEvent.OnDrawIdent(frame);
 //        usleep(1);
 //    }
-    return (void*)0;
-}
+//    return (void*)0;
+//}
 
 /*****************************************************************************
 *                        单击界面显示管理员登陆

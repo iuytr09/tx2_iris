@@ -70,6 +70,7 @@ IrisVideo::IrisVideo(QObject *parent) : QObject(parent),_nBufferNum(5),_hDevice(
                     GXReadRemoteDevicePort(_hDevice, 0x00900038, &i32ExposureTime, &iSize);
                     printf("i32ExposureTime = %d\n",i32ExposureTime);
 
+
                     i32ExposureTime = 50000;
 
                     int status = GXWriteRemoteDevicePort(_hDevice, 0x00900038, &i32ExposureTime, &iSize);
@@ -148,21 +149,21 @@ void* IrisVideo::GetImageThread(void* arg)
 
 
 
-//    usleep(500*1000);
-//    uvc->_runing = true;
-//    int i=680;
-//    while(uvc->_runing){
-//        if(i>1141){
-//            i=1;
-//        }
-//        QString path=  QString("/home/nvidia/work/tx2-gjh/raw_%1.jpg").arg(i);
-//        cv::Mat im = cv::imread(path.toStdString(),CV_LOAD_IMAGE_GRAYSCALE);
+    usleep(500*1000);
+    uvc->_runing = true;
+    int i=680;
+    while(uvc->_runing){
+        if(i>1141){
+            i=1;
+        }
+        QString path=  QString("/home/nvidia/work/tx2-gjh/raw_%1.jpg").arg(i);
+        cv::Mat im = cv::imread(path.toStdString(),CV_LOAD_IMAGE_GRAYSCALE);
 
-//         emit uvc->sigFramed(im);
-//        i++;
-//        //"raw_1.jpg"
-//        usleep(5*1000);
-//    }
+         emit uvc->sigFramed(im);
+        i++;
+        //"raw_1.jpg"+
+        usleep(10*1000);
+    }
 
      Mat reviMat = Mat(2064, 3088, CV_8UC1);
 

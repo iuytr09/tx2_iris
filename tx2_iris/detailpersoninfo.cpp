@@ -31,8 +31,8 @@
 #include "Common/common.h"
 
 #include "serialevent.h"
-#include "../bin/asyncserial.h"
-#include "../bin/basictypes.h"
+//#include "../bin/asyncserial.h"
+//#include "../bin/basictypes.h"
 
 
 //串口封装事件
@@ -430,11 +430,11 @@ void DetailPersonInfo::slotCapturePhoto()
         return;
     }
 
-    //初始化人脸图像采集设备
-    if(!_capturePhoto.initCamera())
-    {
-        return;
-    }
+//    //初始化人脸图像采集设备
+//    if(!_capturePhoto.initCamera())
+//    {
+//        return;
+//    }
 
     //设置人脸图像人员信息
     _capturePhoto.setFileNameInfo(getFacePhotoName());

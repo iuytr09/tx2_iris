@@ -45,7 +45,8 @@ SOURCES += main.cpp\
     Algorithm/iris_algorith.cpp \
     Worker/enrollworker.cpp \
     Worker/identworker.cpp \
-    Algorithm/face_algorith.cpp
+    Algorithm/face_algorith.cpp \
+    Worker/faceworker.cpp
 
 
 
@@ -86,9 +87,10 @@ HEADERS  += mainwindow.h \
     Algorithm/iris_algorith.h \
     Worker/enrollworker.h \
     Worker/identworker.h \
+    Algorithm/face_algorith.h \
     ../jdFace_sdk_2.0.0/visi_error.h \
     ../jdFace_sdk_2.0.0/visi_face.h \
-    Algorithm/face_algorith.h
+    Worker/faceworker.h
 
 
     messagebox.h \
@@ -112,12 +114,13 @@ FORMS    += mainwindow.ui \
     capturephoto.ui
 INCLUDEPATH +=/usr/include/opencv2
 
-LIBS += -L/usr/local/lib/  -liris-sdk \
+LIBS += -L/usr/local/lib/ \
     -L/usr/lib/ \
     -lopencv_core \
     -lopencv_highgui \
     -lopencv_imgproc \
     -lgxiapi \
+    -liris-sdk \
     -lvisiFace
 
 

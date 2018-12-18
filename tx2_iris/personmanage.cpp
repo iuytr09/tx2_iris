@@ -33,42 +33,7 @@
 #include "Common/common.h"
 
 #include "Algorithm/iris_algorith.h"
-
-
-//static bool createConnection(QWidget* parent)
-//{
-//    //TO DO
-//    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-//    db.setDatabaseName("../database/personinfo.db");
-
-//    if(!db.open())
-//    {
-//        QMessageBox::critical(parent, QString::fromUtf8("连接数据库"), QString::fromUtf8("数据库打开失败！"), QMessageBox::Ok);
-//        return false;
-//    }
-
-//    if(!QFile::exists("../database/personinfo.db"))
-//    {
-//        QSqlQuery query;
-//        query.exec(QString("CREATE TABLE person (uid int primary key not NULL, name varchar, gender varchar,"
-//                           "idnum varchar, departid int, iris varchar, card varchar, note varchar)"));
-
-//        if(!query.isActive())
-//        {
-//            QMessageBox::warning(parent, QString::fromUtf8("创建数据库"), query.lastError().text());
-//            return false;
-//        }
-
-//        query.exec(QString("CREATE TABLE depart (id int primary key not NULL, name varchar)"));
-//        if(!query.isActive())
-//        {
-//            QMessageBox::warning(parent, QString::fromUtf8("创建数据库"), query.lastError().text());
-//            return false;
-//        }
-//    }
-
-//    return true;
-//}
+#include "Algorithm/face_algorith.h"
 
 
 PersonManage::PersonManage(QWidget *parent) :

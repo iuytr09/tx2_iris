@@ -36,24 +36,16 @@ using namespace cv;
 
 
 
-
 DialogIdentify::DialogIdentify(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::DialogIdentify)
 {
     ui->setupUi(this);
-
     /**********界面时间实时显示*****************/
     //获取系统现在的时间
     QDateTime time = QDateTime::currentDateTime();
     QString strTime = time.toString("yyyy-MM-dd hh:mm:ss");//设置系统时间显示格式
     ui->labTime->setText(QString::fromUtf8("时间：")+ strTime);
-
-
-//    //新建定时器 关联当前时间
-//    this->startTimer(1000);
-////    connect(&identEvent,SIGNAL(sigResult(long,int)),this,SLOT(IdentResult(long,int)));
-////    connect(&identEvent,SIGNAL(sigLoginResult(long,int)),this,SLOT(LoginIdentResult(long,int)));
 
     //设置界面背景
     QPalette palette;
@@ -62,24 +54,25 @@ DialogIdentify::DialogIdentify(QWidget *parent) :
 
     _isClose = false;
     _isLoginIdent = false;
-
-//    _identInteraction = Interaction::GetInteractionInstance();
-//    _irisClearFlag = LAndRImgBlur;
     _identResultState = ContinueState;
 
     //新建定时器
     _timerStartIdent = new QTimer();
-   // 关联定时器计满信号和相应的槽函数
-   // connect(_timerStartIdent,SIGNAL(timeout()),this,SLOT(StartAttendIdent()));
 
-    //启动异步识别识别
-    //StartAttendIdent();
+    _pFaceAlgorith = Face_Algorith::GetInstance();
+    _pUsbVideoCap = UsbVideoCap::GetInstance();
+    if(connect(_pUsbVideoCap,SIGNAL(OnUpdateImage(cv::Mat)),this,SLOT(slotImageUpdate(cv::Mat))))
+    {
+        std::cout<<"guanlian chenggong!"<<std::endl;
+    }else{
+        std::cout<<"guanlian shibai!"<<std::endl;
+    }
 }
 
 DialogIdentify::~DialogIdentify()
 {
     _exitIdentThread = false;
-
+    disconnect(_pUsbVideoCap,SIGNAL(OnUpdateImage(cv::Mat)),this,SLOT(slotImageUpdate(cv::Mat)));
     delete _timerStartIdent;
     delete ui;
 }
@@ -109,7 +102,7 @@ void DialogIdentify::StartAttendIdent()
     if(error!=0)
     {
         std::cout<<"开始识别失败！"<<std::endl;
-       // QMessageBox::information(this, QString::fromUtf8("识别"), QString::fromUtf8("识别失败！"));
+        // QMessageBox::information(this, QString::fromUtf8("识别"), QString::fromUtf8("识别失败！"));
     }
     else
     {
@@ -120,7 +113,7 @@ void DialogIdentify::StartAttendIdent()
 
 /*****************************************************************************
 *                        管理员登陆开始识别
-*  函 数 名： StartIdent
+*  函 数 名： StaSLOon_start_work_action_triggeredTrtIdent
 *  功    能：启动识别
 *  说    明：
 *  参    数：
@@ -128,7 +121,7 @@ void DialogIdentify::StartAttendIdent()
 *  创 建 人：刘中昌
 *  创建时间：2018-12-23
 *  修 改 人：
-*  修改时间：
+*  修改时间：     connect(_pIrisVideo,SIGNAL(sigFramed(cv::Mat)),this,SLOT(iris_image(cv::Mat)));
 *****************************************************************************/
 void DialogIdentify::StartLoginIdent()
 {
@@ -263,6 +256,8 @@ void DialogIdentify::timerEvent(QTimerEvent *event)
     _count =0;
 }
 
+
+
 /*****************************************************************************
 *                         注册模块将采集到的图像显示到界面
 *  函 数 名：ImageUpdate
@@ -276,11 +271,14 @@ void DialogIdentify::timerEvent(QTimerEvent *event)
 *  修 改 人：
 *  修改时间：
 *****************************************************************************/
-void DialogIdentify::ImageUpdate(QImage im)
+void DialogIdentify::slotImageUpdate(cv::Mat im)
 {
-    if(!im.isNull())
+    if(!im.empty())
     {
-        ui->labelFace->setPixmap(QPixmap::fromImage(im));
+
+        _pFaceAlgorith->UpdateImage(im);
+        QImage frame = cvMat2QImage(im);
+        ui->labelFace->setPixmap(QPixmap::fromImage(frame));
         //_count ++;
     }
     else

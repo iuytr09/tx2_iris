@@ -56,7 +56,7 @@ public:
     enum WorkStatus { CloclIn = 0, ClockOut, Other};
     enum PageStatus {IdentityPage,ManagerPage,IrisLoginPage,PersonPage,SystermPage,ShutdownPage,DataManagerPage,HelpPage,OtherPage};
 private slots:
-    void ImageUpdate(QImage im);     //界面图像更新
+//    void ImageUpdate(QImage im);     //界面图像更新
     //上班打卡
     void on_start_work_action_triggered();
 
@@ -97,7 +97,7 @@ private slots:
 
 public slots:
     void iris_image(cv::Mat im);
-    void face_image(cv::Mat im);
+//    void face_image(cv::Mat im);
     //void iris_enroll_success(PersonInfo p);
     void iris_ident_success(PersonInfo p);
 private :
@@ -137,11 +137,11 @@ private:
 
     bool    _loginShowTag;
 
-    IrisVideo *_pIrisVideo;//采集
+    IrisVideo *_pIrisVideo;//hongmo采集
     IRIS_Algorith* _pAlgorith;
     Face_Algorith* _pFaceAlgorith;
-    static void * CapImgThread(void* arg); //上传图片数据线程
-    std::thread _capImgThread;            //识别模块图像显示线程
+//    static void * CapImgThread(void* arg); //上传图片数据线程
+//    std::thread _capImgThread;            //识别模块图像显示线程
 
     //UsbVideoCap *_usbVideoCap;
 };

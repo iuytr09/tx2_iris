@@ -14,7 +14,9 @@ Face_Algorith::Face_Algorith()
     _pFaceDataModel = new QSqlTableModel();
     _pFaceDataModel->setTable("facedata");
     _pFaceDataModel->select();
+    _imagemanager.InitParam();
 
+    _pfaceWorker= new FaceWorker();
 
     QSqlRecord record;
     for(int i=0;i<_pFaceDataModel->rowCount();i++){
@@ -34,7 +36,8 @@ Face_Algorith::~Face_Algorith(){
     release_visi_face_module();
 }
 
-bool Face_Algorith::saveFeature(std::vector<float> &feat,cv::Mat im)
+
+bool Face_Algorith::SaveFeature(std::vector<float> &feat,cv::Mat im,cv::Mat reg_face)
 {
     QMutexLocker locker(&_save_im_mutex);//加互斥锁。
     QSqlRecord record = _pFaceDataModel->record();
@@ -50,10 +53,12 @@ bool Face_Algorith::saveFeature(std::vector<float> &feat,cv::Mat im)
     QString tb = QString("feat");
     record.setValue(tb,  array);
 
-    // _imagemanager.SaveImage(_user.id,index,_images.at(index).im);
+
 
     _pFaceDataModel->insertRecord(-1, record);
     bool isok =_pFaceDataModel->submitAll();
+
+    _imagemanager.SaveFaceImage(_user.id,im,reg_face);
 
     if(isok){
         std::cout<<"cun chu cheng gong!!"<<std::endl;
@@ -65,68 +70,42 @@ bool Face_Algorith::saveFeature(std::vector<float> &feat,cv::Mat im)
     //emit sigEnrollSuccess();
 }
 
-void Face_Algorith::Identify(cv::Mat im){
-    std::vector<std::vector<float>> face_boxs;
-    std::vector<cv::Mat> out_faces;
-    int state = get_all_faces(im,face_boxs,out_faces);
-    if(state==0){
-        std::vector<float> fbox;
-        std::vector<float> feat;
-
-        state= extract_feature(im, fbox,feat, 0.2);
-        if(state==0)
-        {
-            codeCompare(feat);
-        }
+void Face_Algorith::Identify(){
+    if(_pfaceWorker!=NULL){
+        _pfaceWorker->SetState(FaceState::FaceIdent);
     }
-
-    //float get_score(const float* feat_1, const float* feat_2);
 }
 
-void Face_Algorith::LoginIdentify(cv::Mat im){
+  void Face_Algorith::UpdateImage(cv::Mat im){
+      if(_pfaceWorker!=NULL){
+          _pfaceWorker->Push(im);
+      }
+  }
 
-    //     int get_all_faces(const cv::Mat &image, std::vector<std::vector<float>> &face_boxs, std::vector<cv::Mat> &out_faces);
 
-    //     int extract_feature(const cv::Mat &image, std::vector<float> &fbox, std::vector<float> &feat, float hackness_thr = 0.2);
-    //float get_score(const float* feat_1, const float* feat_2);
-}
+//void Face_Algorith::LoginIdentify(cv::Mat im){
 
-void Face_Algorith::Enroll(cv::Mat im){
-    std::vector<std::vector<float>> face_boxs;
-    std::vector<cv::Mat> out_faces;
-    int state = get_all_faces(im,face_boxs,out_faces);
-    if(state==0){
-        std::vector<float> fbox;
-        cv::Mat reg_face;
-        std::vector<float> feat;
-        state = face_register(im, fbox, reg_face, feat,0.2);
-        if(state==0){
-            if(saveFeature(feat,im)){
-                emit sigEnrollSuccess(0);
-            }else{
-                emit sigEnrollSuccess(-2);
-            }
-        }else{
-            emit sigEnrollSuccess(-1);
-        }
+//    //     int get_all_faces(const cv::Mat &image, std::vector<std::vector<float>> &face_boxs, std::vector<cv::Mat> &out_faces);
 
+//    //     int extract_feature(const cv::Mat &image, std::vector<float> &fbox, std::vector<float> &feat, float hackness_thr = 0.2);
+//    //float get_score(const float* feat_1, const float* feat_2);
+//}
+
+void Face_Algorith::Enroll(){
+
+    if(_pfaceWorker!=NULL){
+        _pfaceWorker->SetState(FaceState::FaceEnroll);
     }
-
-
-
-    int extract_feature(const cv::Mat &image, std::vector<float> &fbox, std::vector<float> &feat, float hackness_thr = 0.2);
-
-
 }
 
-void Face_Algorith::codeCompare(std::vector<float> source){
+void Face_Algorith::CodeCompare(std::vector<float> source){
     float dDist=1.0;
     QSqlRecord record;
     for(int i=0;i<_pFaceDataModel->rowCount();i++){
         double dtemp=1.0;
-//        QSqlRecord recordtemp= _pFaceDataModel->record(i);
-//        // std::vector<float> codeExist;
-//        QByteArray datatemple=recordtemp.value("feat").to;
+        //        QSqlRecord recordtemp= _pFaceDataModel->record(i);
+        //        // std::vector<float> codeExist;
+        //        QByteArray datatemple=recordtemp.value("feat").to;
         //codeExist->nLength = datatemple.length();
 
         //codeExist->pData = datatemple.data();

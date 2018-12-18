@@ -31,7 +31,7 @@ class CapturePhoto;
 
 class CapturePhoto : public QDialog
 {
-    friend void *GetFacePhoto(void* arg);
+//    friend void *GetFacePhoto(void* arg);
 
     Q_OBJECT    
 public:
@@ -40,21 +40,23 @@ public:
     //设置人脸图像文件名信息
     bool setFileNameInfo(QString personInfo);
 
-    bool initCamera();
+//    bool initCamera();
+     void SetFaceImage(QImage);
 signals:
-    void sigUpdateImage(QImage);
+//    void sigUpdateImage(QImage);
+
 
 protected slots:
-    void slotGetFaceImage(QImage);
+
     void slotBack();
     void slotSave();
 
 protected:
-    void stopCapturing();
+//    void stopCapturing();
 
 private:
     Ui::CapturePhoto *ui;
-    pthread_t thrID;
-    bool _stop;
+//    pthread_t thrID;
+//    bool _stop;
     QString persInfo;
 };

@@ -20,7 +20,7 @@
 #define IDENTITY_H
 
 #include <QtWidgets/QWidget>
-#include "../USBAPI/simplelock.h"
+//#include "../USBAPI/simplelock.h"
 #include <QVector>
 
 #include <mutex>
@@ -28,6 +28,8 @@
 #include <condition_variable>
 #include "FeatureManage.h"
 #include "interaction.h"
+#include "Algorithm/face_algorith.h"
+#include "VideoCapture/usbvideocap.h"
 
 namespace Ui {
 class DialogIdentify;
@@ -58,7 +60,7 @@ signals:
 public slots:
 
     void timerEvent(QTimerEvent *event);//界面时间更新
-    void ImageUpdate(QImage im);     //界面图像更新
+    void slotImageUpdate(cv::Mat im);     //界面图像更新
     void IrisImageUpdate(QImage im); //hong mo
     void StopIdent();       //停止识别
 
@@ -87,6 +89,9 @@ private:
     int _count;                                //帧率
     bool _isClose;                             //是否停止识别
     bool  _isLoginIdent;                      //是否开始识别
+
+    UsbVideoCap* _pUsbVideoCap;
+    Face_Algorith* _pFaceAlgorith;
 
     //人机交互类
  //   static Interaction *_identInteraction;
