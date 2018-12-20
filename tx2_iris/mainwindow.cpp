@@ -37,6 +37,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     qRegisterMetaType<cv::Mat> ("cv::Mat");
     qRegisterMetaType<PersonInfo> ("PersonInfo");
+    qRegisterMetaType<std::vector<std::vector<float>>>("std::vector<std::vector<float>>");
+    qRegisterMetaType<std::vector<float>>("std::vector<float>");
 
     //隐藏标题栏
     // setWindowFlags(Qt::CustomizeWindowHint);

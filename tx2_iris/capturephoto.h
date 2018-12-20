@@ -20,7 +20,7 @@
 #include <QtWidgets/QDialog>
 #include <QImage>
 #include <pthread.h>
-
+#include "VideoCapture/usbvideocap.h"
 
 void *GetFacePhoto(void* arg);
 
@@ -31,8 +31,6 @@ class CapturePhoto;
 
 class CapturePhoto : public QDialog
 {
-//    friend void *GetFacePhoto(void* arg);
-
     Q_OBJECT    
 public:
     explicit CapturePhoto(QWidget *parent = 0);
@@ -40,23 +38,18 @@ public:
     //设置人脸图像文件名信息
     bool setFileNameInfo(QString personInfo);
 
-//    bool initCamera();
-     void SetFaceImage(QImage);
+    void SetFaceImage(QImage);
 signals:
-//    void sigUpdateImage(QImage);
 
 
 protected slots:
+    void slotImageUpdate(cv::Mat);
 
     void slotBack();
     void slotSave();
 
-protected:
-//    void stopCapturing();
-
 private:
     Ui::CapturePhoto *ui;
-//    pthread_t thrID;
-//    bool _stop;
     QString persInfo;
+    UsbVideoCap *_pUsbVideoCap;
 };

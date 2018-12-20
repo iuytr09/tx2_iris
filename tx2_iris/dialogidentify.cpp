@@ -60,6 +60,7 @@ DialogIdentify::DialogIdentify(QWidget *parent) :
     _timerStartIdent = new QTimer();
 
     _pFaceAlgorith = Face_Algorith::GetInstance();
+    _pFaceAlgorith->StartWorker();
     _pUsbVideoCap = UsbVideoCap::GetInstance();
     if(connect(_pUsbVideoCap,SIGNAL(OnUpdateImage(cv::Mat)),this,SLOT(slotImageUpdate(cv::Mat))))
     {

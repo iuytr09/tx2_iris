@@ -24,79 +24,14 @@
 #include "capturephoto.h"
 #include "ui_capturephoto.h"
 #include "Common/common.h"
-
-//*****************************
-//*
-//*类 名：QIdentifyCallback
-//*作 用：回调函数 1，回调返回识别结果 2， 返回提示信息
-//*
-//*******************************/
-//class FacePhotoEvent :public QObject
-//{
-//    Q_OBJECT
-//public:
-
-//    void onResult(QImage img)//返回识别结果
-//    {
-//        emit sigResult(img);
-//    }
-
-//signals:
-//    void sigResult(QImage img);
-
-//};
-
-//FacePhotoEvent faceEvent;
-
-/////*****************************************************************************
-////*                        人脸图像采集处理函数
-////*  函 数 名：GetFacePhoto
-////*  功    能：调用人脸采集图像接口，采集到图像后发射信号，供图像处理类使用
-////*  说    明：
-////*  参    数：
-////*  返 回 值：
-////*  创 建 人：liuzhch
-////*  创建时间：2018-10-20
-////*  修 改 人：
-////*  修改时间：
-////*****************************************************************************/
-//void *GetFacePhoto(void* arg)
-//{
-//    //TO DO
-//    if(NULL == arg)
-//    {
-//        return (void *)0;
-//    }
-
-//    CapturePhoto* cp = static_cast<CapturePhoto *>(arg);
-
-//    VideoCapture cap;
-//    if(!cap.open(1))
-//    {
-//        cp->_stop=true;
-//        return -1;
-//    }
-//    Mat frame;
-
-//    cp->_stop = false;
-//    while (!cp->_stop)
-//    {
-//        cap >> frame;
-//        QImage im = cvMat2QImage(frame);
-////        emit cp->sigUpdateImage(im);
-//        cp->slotGetFaceImage(im);
-//        usleep(30);
-//    }
-//    cap.release();
+#include "Algorithm/face_algorith.h"
 
 
-//    return (void*)0;
-//}
 
 CapturePhoto::CapturePhoto(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CapturePhoto)//,
-    //_stop(true)
+  //_stop(true)
 {
     ui->setupUi(this);
 
@@ -106,36 +41,41 @@ CapturePhoto::CapturePhoto(QWidget *parent) :
     //setBackgroundColor(QColor(242,241,240));
 
 
+    _pUsbVideoCap = UsbVideoCap::GetInstance();
+    if(connect(_pUsbVideoCap,SIGNAL(OnUpdateImage(cv::Mat)),this,SLOT(slotImageUpdate(cv::Mat))))
+    {
+        std::cout<<"guanlian chenggong!"<<std::endl;
+    }else{
+        std::cout<<"guanlian shibai!"<<std::endl;
+    }
+
     //连接返回和保存信号和对应的槽
     connect(ui->btnBack, SIGNAL(clicked()), this, SLOT(slotBack()));
     connect(ui->btnSave, SIGNAL(clicked()), this, SLOT(slotSave()));
     connect(this, SIGNAL(sigUpdateImage(QImage)), this, SLOT(slotGetFaceImage(QImage)));
-   // connect(&faceEvent,SIGNAL(sigResult(QImage)),this,SLOT(slotGetFaceImage(QImage)));
+
 }
 
 CapturePhoto::~CapturePhoto()
 {
+    Face_Algorith::GetInstance()->SetNoWork();
+    disconnect(_pUsbVideoCap,SIGNAL(OnUpdateImage(cv::Mat)),this,SLOT(slotImageUpdate(cv::Mat)));
     delete ui;
 }
 
 bool CapturePhoto::setFileNameInfo(QString personInfo)
 {
+    Face_Algorith::GetInstance()->SetEnrollWork();
     persInfo = personInfo;
-
     return true;
 }
 
-//bool CapturePhoto::initCamera()
-//{
-//    if(_stop){
-//        pthread_create(&thrID, NULL, GetFacePhoto, this);
-//    }
-//    return true;
-//}
 
-void CapturePhoto::SetFaceImage(QImage img)
+void CapturePhoto::slotImageUpdate(cv::Mat im)
 {
+    QImage img = cvMat2QImage(im);
     if (!img.isNull()){
+
         ui->labFaceImageStream->setPixmap(QPixmap::fromImage(img, Qt::AutoColor));
     }
 }
@@ -155,7 +95,6 @@ void CapturePhoto::SetFaceImage(QImage img)
 void CapturePhoto::slotBack()
 {
     //TO DO
-   // stopCapturing();
     close();
 }
 
@@ -174,15 +113,7 @@ void CapturePhoto::slotBack()
 void CapturePhoto::slotSave()
 {
     //TO DO
-   // stopCapturing();
     //关闭当前窗口
     close();
 }
 
-
-//void CapturePhoto::stopCapturing()
-//{
-//    _stop= true;
-//    void *rtn_status;
-//    pthread_join(thrID, &rtn_status);
-//}

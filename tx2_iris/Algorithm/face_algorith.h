@@ -41,20 +41,29 @@ public:
         _isSetPerson= true;
     }
 
+    void StartWorker();
 
-    void Identify();
+    void SetIdentifyWork();
+    void SetEnrollWork();
+    void SetNoWork();
    // void LoginIdentify();
     void UpdateImage(cv::Mat im);
-    void Enroll();
+
     void CodeCompare(std::vector<float> source);
     bool SaveFeature(std::vector<float> &feat, cv::Mat im, Mat reg_face);
+    FaceWorker* GetWork(){
+        if(_pfaceWorker ==NULL){
+            StartWorker();
+        }
+        return _pfaceWorker;
+    }
 
 private:
 
 
 signals:
     sigEnrollSuccess(int state,std::vector<float> &face_box, cv::Mat &out_face);
-    sigIdentSuccess(int state, std::vector<std::vector<float>>, cv::Mat &out_face);
+    sigIdentSuccess(int, std::vector<std::vector<float>>);
 public slots:
 
 private:

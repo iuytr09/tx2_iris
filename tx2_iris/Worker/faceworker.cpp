@@ -17,7 +17,7 @@ FaceWorker::~FaceWorker()
     _eid.join();
 }
 
-FaceWorker::Run(){
+void FaceWorker::Run(){
     if(!_isruning){
         _eid=std::thread(FaceThread, (void*)this);
     }
@@ -37,18 +37,18 @@ void * FaceWorker::FaceThread(void* arg){
            locker.unlock();
            if(im.empty())
            {
-               usleep(500*1000);
+               usleep(100*1000);
                continue;
            }
 
-           if(e->_fs==FaceState::FaceUnknown||e->_ims.isEmpty()){
-               usleep(500*1000);
-           }else if(FaceState::FaceIdent){
+           if(e->_fs==FaceState::FaceUnknown){
+               usleep(5*1000);
+           }else if(e->_fs==FaceState::FaceIdent){
                std::vector<std::vector<float>> face_boxs;
                std::vector<cv::Mat> out_faces;
                int state = get_all_faces(im,face_boxs,out_faces);
                if(state==0){
-                   emit e->am->sigIdentSuccess(1,face_boxs,NULL);
+                   emit e->am->sigIdentSuccess(1,face_boxs);
                    std::vector<float> fbox;
                    std::vector<float> feat;
 
@@ -62,7 +62,7 @@ void * FaceWorker::FaceThread(void* arg){
 
 
 
-           }else if(FaceState::FaceEnroll){
+           }else if(e->_fs==FaceState::FaceEnroll){
 
                std::vector<float> fbox;
                cv::Mat reg_face;
@@ -80,10 +80,10 @@ void * FaceWorker::FaceThread(void* arg){
 
 
            }else{
-               usleep(500*1000);
+               usleep(50*1000);
            }
         }else{
-             usleep(500*1000);
+             usleep(50*1000);
         }
 
     }

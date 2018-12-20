@@ -31,9 +31,7 @@
 #include "Common/common.h"
 
 #include "serialevent.h"
-//#include "../bin/asyncserial.h"
-//#include "../bin/basictypes.h"
-
+#include"Algorithm/face_algorith.h"
 
 //串口封装事件
 SerialEvent se;
@@ -83,6 +81,8 @@ DetailPersonInfo::DetailPersonInfo(const PersonInfo& personInfo, QWidget *parent
 
 DetailPersonInfo::~DetailPersonInfo()
 {
+    Face_Algorith::GetInstance()->SetPersonInfo(0,"","");
+
    // sm->ReleaseInstance();
     delete ui;
 }
@@ -278,6 +278,8 @@ void DetailPersonInfo::fillData(const PersonInfo& personInfo)
         ui->txtNote->setText(query.value(7).toString());            //设置备注
     }
 
+    Face_Algorith::GetInstance()->SetPersonInfo(personInfo.id,ui->txtName->text(),ui->cmbDepart->currentText());
+
     emit this->sigLoadFaceImage();
 
 //    if(QFile::exists(QString::fromUtf8("%1.%2").arg(ui->txtWorkSN->text()).arg(IMAGE_FORMAT)))
@@ -429,12 +431,6 @@ void DetailPersonInfo::slotCapturePhoto()
         QMessageBox::information(this, QString::fromUtf8("采集人脸图像"), QString::fromUtf8("请先输入人员姓名和工号"));
         return;
     }
-
-//    //初始化人脸图像采集设备
-//    if(!_capturePhoto.initCamera())
-//    {
-//        return;
-//    }
 
     //设置人脸图像人员信息
     _capturePhoto.setFileNameInfo(getFacePhotoName());

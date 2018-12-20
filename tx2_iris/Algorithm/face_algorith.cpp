@@ -16,8 +16,6 @@ Face_Algorith::Face_Algorith()
     _pFaceDataModel->select();
     _imagemanager.InitParam();
 
-    _pfaceWorker= new FaceWorker();
-
     QSqlRecord record;
     for(int i=0;i<_pFaceDataModel->rowCount();i++){
         double dtemp=1.0;
@@ -32,8 +30,19 @@ Face_Algorith::Face_Algorith()
     }
 }
 
+
+
 Face_Algorith::~Face_Algorith(){
     release_visi_face_module();
+}
+
+void Face_Algorith::StartWorker()
+{
+    if (_pfaceWorker==NULL){
+        _pfaceWorker= new FaceWorker();
+    }else{
+        _pfaceWorker->Run();
+    }
 }
 
 
@@ -46,7 +55,8 @@ bool Face_Algorith::SaveFeature(std::vector<float> &feat,cv::Mat im,cv::Mat reg_
     record.setValue("depart_name", _user.depart_name);
 
     QByteArray array;
-    int len_fVar = sizeof(feat); // 4*4 = 16 (一个float占4个字节)
+    int l=sizeof(&feat); // 4*4 = 16 (一个float占4个字节)
+    int len_fVar =  4*1024;//
     array.resize(len_fVar);
     memcpy(array.data(), &feat, len_fVar);
 
@@ -71,7 +81,7 @@ bool Face_Algorith::SaveFeature(std::vector<float> &feat,cv::Mat im,cv::Mat reg_
     //emit sigEnrollSuccess();
 }
 
-void Face_Algorith::Identify(){
+void Face_Algorith::SetIdentifyWork(){
     if(_pfaceWorker!=NULL){
         _pfaceWorker->SetState(FaceState::FaceIdent);
     }
@@ -93,16 +103,29 @@ void Face_Algorith::UpdateImage(cv::Mat im){
 //}
 
 
-void Face_Algorith::Enroll(){
+void Face_Algorith::SetEnrollWork(){
 
-    if(_pfaceWorker!=NULL){
+    if(_pfaceWorker!=NULL && _user.id>0){
         _pfaceWorker->SetState(FaceState::FaceEnroll);
+    }else{
+        std::cout<<"_user.id:"<<_user.id<<std::endl;
+    }
+}
+
+
+void Face_Algorith::SetNoWork(){
+
+    if(_pfaceWorker!=NULL && _user.id>0){
+        _pfaceWorker->SetState(FaceState::FaceUnknown);
+    }else{
+        std::cout<<"_user.id:"<<_user.id<<std::endl;
     }
 }
 
 void Face_Algorith::CodeCompare(std::vector<float> source){
     float dDist=1.0;
     QSqlRecord record;
+    std::vector<std::vector<float>> face_box;
     for(int i=0;i<_pFaceDataModel->rowCount();i++){
         double dtemp=1.0;
         QSqlRecord recordtemp= _pFaceDataModel->record(i);
@@ -124,9 +147,9 @@ void Face_Algorith::CodeCompare(std::vector<float> source){
         _user.id = record.value("uid").toInt();
         _user.name = record.value("name").toString();
         _user.depart_name = record.value("depart_name").toString();
-        emit sigIdentSuccess(0,NULL,NULL);//识别成功！
+        emit sigIdentSuccess(0,face_box);//识别成功！
     }else{
-        emit sigIdentSuccess(-9,NULL,NULL);//识别失败！
+        emit sigIdentSuccess(-9,face_box);//识别失败！
 
     }
 }
