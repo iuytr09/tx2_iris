@@ -50,10 +50,3 @@ bool Application::notify(QObject *obj, QEvent *e)
     //do something
     return QApplication::notify(obj,e);
 }
-
-//bool Application::qwsEventFilter(QWSEvent *event)
-//bool Application::qwsEventFilter(QWSEvent * event)
-//{
-//    //do something
-//    return QApplication::qwsEventFilter(event);
-//}

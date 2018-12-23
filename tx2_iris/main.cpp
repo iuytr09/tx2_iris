@@ -23,12 +23,48 @@
 #include<QSqlTableModel>
 #include<QSqlRecord>
 #include<iostream>
+#include<QSqlError>
+#include<QMessageBox>
+#include<QSqlQuery>
 
+
+#include "interaction.h"
 
 //#include "application.h"
 
 #include "dbconnection.h"
 
+void test(){
+    QSqlQuery query;
+//    query.prepare("INSERT INTO TEST(ID,NAME) VALUES (?,?)");
+//    query.addBindValue(1);
+//     query.addBindValue("_user.name");
+//     query.exec();
+
+    query.prepare("INSERT INTO facedata(id,uid,name,depart_name,feat) VALUES (NULL,:uid,:name,:depart_name,:feat)");
+
+    query.bindValue(":uid", 1);
+    query.bindValue(":name", "_user.name");
+    query.bindValue(":depart_name", "_user.depart_name");
+
+    QByteArray array;
+
+//    //int l=sizeof(feat); // 4*4 = 16 (一个float占4个字节)
+//    int len_fVar =  4*feat.size();//
+//    array.resize(len_fVar);
+//    memcpy(array.data(), &feat[0], len_fVar);
+    array.append("sdklakflsdafkaldkflsdakflad");
+
+    query.bindValue(":feat",  array);
+    query.exec();
+
+    if(!query.isActive())
+    {
+        QMessageBox::warning(NULL,"数据库存储人脸信息失败",query.lastError().text());
+    }else{
+        std::cout<<"存储虹膜信息成功!!"<<std::endl;
+    }
+}
 
 int main(int argc, char *argv[])
 {
@@ -38,10 +74,13 @@ int main(int argc, char *argv[])
     a.setStyle("macintosh");
     a.installTranslator(&oTranslator);   //汉化消息框按钮
 
+    Interaction::GetInteractionInstance()->PlayInteractionSound(InteractionResultType::EnrollSuccess,IrisPositionFlag::Far);
+
 //    if(!createConnection(NULL))      //创建数据库连接
 //    {
 //        return 0;
 //    }
+//    test();
 
 //   //ce shi shu ju ku cao zuo
 //    QSqlTableModel *_pIrisDataModel = new QSqlTableModel(NULL);//QSqlTableModel

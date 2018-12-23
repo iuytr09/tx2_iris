@@ -28,7 +28,8 @@
 #include "QThread"
 #include <sys/time.h>
 #include <QMessageBox>
-
+#include<QPainter>
+#include<QRect>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -47,6 +48,9 @@ DialogIdentify::DialogIdentify(QWidget *parent) :
     QString strTime = time.toString("yyyy-MM-dd hh:mm:ss");//设置系统时间显示格式
     ui->labTime->setText(QString::fromUtf8("时间：")+ strTime);
 
+
+    _top_im=QImage(480,640,QImage::Format_ARGB32);
+    _top_im.fill(0);
     //设置界面背景
     QPalette palette;
     palette.setBrush(QPalette::Background, QBrush(QPixmap(":/image/背景.jpg")));
@@ -61,12 +65,15 @@ DialogIdentify::DialogIdentify(QWidget *parent) :
 
     _pFaceAlgorith = Face_Algorith::GetInstance();
     _pFaceAlgorith->StartWorker();
+
+    connect(_pFaceAlgorith,SIGNAL(sigIdentSucsses(PersonInfo)),this,SLOT(IdentFaceResult(PersonInfo)));
+    connect(_pFaceAlgorith,SIGNAL(sigIdentState(int, std::vector<std::vector<float>>)),this,SLOT(updateIdentState(int, std::vector<std::vector<float>>)));
     _pUsbVideoCap = UsbVideoCap::GetInstance();
     if(connect(_pUsbVideoCap,SIGNAL(OnUpdateImage(cv::Mat)),this,SLOT(slotImageUpdate(cv::Mat))))
     {
-        std::cout<<"guanlian chenggong!"<<std::endl;
+        std::cout<<"guan lian chenggong!"<<std::endl;
     }else{
-        std::cout<<"guanlian shibai!"<<std::endl;
+        std::cout<<"guan lian shibai!"<<std::endl;
     }
 }
 
@@ -78,6 +85,54 @@ DialogIdentify::~DialogIdentify()
     delete ui;
 }
 
+void DialogIdentify::IdentFaceResult(PersonInfo info){
+
+    ui->labStatu->setText(info.name + "shi bie cheng gong!");
+}
+
+//gen ju state chenge pen  colors
+void DialogIdentify::updateIdentState(int state, std::vector<std::vector<float>> face_boxs){
+    _top_im.fill(0);
+
+    QPainter painter(&_top_im);
+    //画想要画的东西
+    if(state==0){
+        painter.setPen(QPen(Qt::green,5,Qt::SolidLine,Qt::RoundCap,Qt::MiterJoin));
+
+    }else{
+        painter.setPen(QPen(Qt::red,5,Qt::SolidLine,Qt::RoundCap,Qt::MiterJoin));
+    }
+    painter.setBrush(Qt::NoBrush);
+    //more boxs
+    for(int i=0;i<face_boxs.size();i++){
+        if(face_boxs.at(i).size()>2){
+            float lt_x=face_boxs.at(i)[0],lt_y=face_boxs.at(i)[1],rb_x=face_boxs.at(i)[0],rb_y=face_boxs.at(i)[1];
+            for (int j=2;j<face_boxs.at(i).size()-1;j+=2){
+
+                if(face_boxs.at(i).at(j)>rb_x){
+                    rb_x=face_boxs.at(i).at(j);
+                }
+                if(face_boxs.at(i).at(j)<lt_x){
+                    lt_x =face_boxs.at(i).at(j);
+                }
+
+                if(face_boxs.at(i).at(j+1)>rb_y){
+                    rb_y=face_boxs.at(i).at(j+1);
+                }
+                if(face_boxs.at(i).at(j+1)<lt_y){
+                    lt_y =face_boxs.at(i).at(j+1);
+                }
+
+            }
+            QRect rect(int(lt_x),int(lt_y),int(rb_x),int(rb_y));//构造一个矩形
+            std::cout<<int(lt_x)<<" "<<int(lt_y)<<" "<<int(rb_x)<<" "<<int(rb_y)<<std::endl;
+            painter.drawRect(int(lt_x),int(lt_y),int(rb_x)-int(lt_x),int(rb_y)-int(lt_y));
+           // painter.drawRect(rect);
+        }
+    }
+    painter.end();
+
+}
 
 /*****************************************************************************
 *                        开始识别
@@ -93,6 +148,11 @@ DialogIdentify::~DialogIdentify()
 *****************************************************************************/
 void DialogIdentify::StartAttendIdent()
 {
+
+    //ren lian shi bie
+    _pFaceAlgorith->SetIdentifyWork();
+
+
     _identResultState = UnKnownState;
     _timerStartIdent->stop();
 
@@ -130,8 +190,6 @@ void DialogIdentify::StartLoginIdent()
     _isClose = false;
     _isLoginIdent =true;
 }
-
-
 
 /*****************************************************************************
 *                        显示识别结果函数
@@ -277,14 +335,38 @@ void DialogIdentify::slotImageUpdate(cv::Mat im)
     if(!im.empty())
     {
 
-        if(count%10==0){
+        if(count%5==0){
             _pFaceAlgorith->UpdateImage(im);
             count=0;
         }
         count++;
 
+        //        QPixmap pixmap = QPixmap::fromImage(im);
+        //        pixmap.scaled(ui->labRealTimeIm->size(), Qt::KeepAspectRatio);
+        //        ui->labRealTimeIm->setScaledContents(true);
+        //        ui->labRealTimeIm->setPixmap(pixmap);
+
+
+        //        int h = im.rows();
+        //        int w = im.cols();
+
+
+
+        //        QImage  ims(w,h,QImage::Format_RGB32);
         QImage frame = cvMat2QImage(im);
-        ui->labelFace->setPixmap(QPixmap::fromImage(frame));
+
+        QPainter painter(&frame);
+        //        //画想要画的东西
+        //        painter.setPen(QPen(Qt::red,15,Qt::SolidLine,Qt::RoundCap,Qt::MiterJoin));
+        //        painter.setBrush(Qt::NoBrush);
+        //        QRect rect(100,100,250,200);//构造一个矩形
+        painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
+        painter.drawImage(0,0,_top_im);
+        painter.end();
+        QPixmap pixmap = QPixmap::fromImage(frame);
+        pixmap.scaled(ui->labelFace->size(), Qt::KeepAspectRatio);
+        ui->labelFace->setScaledContents(true);
+        ui->labelFace->setPixmap(pixmap);
         //_count ++;
     }
     else

@@ -22,7 +22,18 @@ static IrisVideo *IrisVideo::GetInstance()
 
     return _iris_v_instance;
 }
-
+/*****************************************************************************
+*                       构造 函数
+*  函 数 名： IrisVideo
+*  功    能： 虹膜摄像头数据获取类
+*  说    明：
+*  参    数：
+*  返 回 值：
+*  创 建 人：liuzhch
+*  创建时间：2018-12-20
+*  修 改 人：
+*  修改时间：
+*****************************************************************************/
 IrisVideo::IrisVideo(QObject *parent) : QObject(parent),_nBufferNum(5),_hDevice(NULL),_isOpen(false),_stoped(true),_runing(false)
 {
     int device_num=0;
@@ -89,7 +100,7 @@ IrisVideo::IrisVideo(QObject *parent) : QObject(parent),_nBufferNum(5),_hDevice(
 
 IrisVideo::~IrisVideo()
 {
-     _iris_v_instance->SetStop(true);
+    _iris_v_instance->SetStop(true);
     _capImgThread.join();
 
     //关闭设备
@@ -102,6 +113,18 @@ IrisVideo::~IrisVideo()
 
 }
 
+/*****************************************************************************
+*                        函数
+*  函 数 名： irisStopStreamOff
+*  功    能： 停止虹膜摄像头采集数据
+*  说    明：
+*  参    数：
+*  返 回 值：
+*  创 建 人：liuzhch
+*  创建时间：2018-12-20
+*  修 改 人：
+*  修改时间：
+*****************************************************************************/
 void IrisVideo::irisStopStreamOff()
 {
 
@@ -114,23 +137,59 @@ void IrisVideo::irisStopStreamOff()
 
 }
 
+/*****************************************************************************
+*                        函数
+*  函 数 名： irisGxStreamOn
+*  功    能： 启动虹膜摄像头采集图像
+*  说    明：
+*  参    数：
+*  返 回 值：
+*  创 建 人：liuzhch
+*  创建时间：2018-12-20
+*  修 改 人：
+*  修改时间：
+*****************************************************************************/
 void IrisVideo::irisGxStreamOn()
 {
     if(_iris_v_instance->_hDevice!=NULL){
         //开始采集
         _iris_v_instance->_status = GxStreamOn(_iris_v_instance->_hDevice);
-         printf("GxStreamOn Failed ret= %d\n",_iris_v_instance->_status);
+        printf("GxStreamOn Failed ret= %d\n",_iris_v_instance->_status);
         //kai deng
     }
 
 }
 
+/*****************************************************************************
+*                        函数
+*  函 数 名： Run
+*  功    能： 启动采集线程
+*  说    明：
+*  参    数：
+*  返 回 值：
+*  创 建 人：liuzhch
+*  创建时间：2018-12-20
+*  修 改 人：
+*  修改时间：
+*****************************************************************************/
 void IrisVideo::Run(){
     if(!_runing){
         _capImgThread = std::thread(GetImageThread, (void*)this);
     }
 }
 
+/*****************************************************************************
+*                        函数
+*  函 数 名： GetImageThread
+*  功    能： 虹膜图像采集线程
+*  说    明：
+*  参    数：
+*  返 回 值：
+*  创 建 人：liuzhch
+*  创建时间：2018-12-20
+*  修 改 人：
+*  修改时间：
+*****************************************************************************/
 void* IrisVideo::GetImageThread(void* arg)
 {
     IrisVideo* uvc =static_cast<IrisVideo *>(arg);
@@ -146,9 +205,8 @@ void* IrisVideo::GetImageThread(void* arg)
         printf("AcqusitionStart Failed ret= %d\n",uvc->_status);
         return (void*)0;
     }
-
-
-
+    /*******************模拟采集********************************/
+    //模拟采集数据
     usleep(500*1000);
     uvc->_runing = true;
     int i=680;
@@ -159,45 +217,37 @@ void* IrisVideo::GetImageThread(void* arg)
         QString path=  QString("/home/nvidia/work/tx2-gjh/raw_%1.jpg").arg(i);
         cv::Mat im = cv::imread(path.toStdString(),CV_LOAD_IMAGE_GRAYSCALE);
 
-         emit uvc->sigFramed(im);
+        emit uvc->sigFramed(im);
         i++;
         //"raw_1.jpg"+
         usleep(10*1000);
     }
+    /*********************** end ****************************/
 
-     Mat reviMat = Mat(2064, 3088, CV_8UC1);
-
- uvc->_runing = true;
+    //真实采集
+    Mat reviMat = Mat(2064, 3088, CV_8UC1);
+    uvc->_runing = true;
     while(uvc->_runing){
-
-//        if(uvc->_stoped){
-//            usleep(500*1000);
-//            continue;
-//        }
         usleep(50*1000);
         GX_FRAME_DATA *pFrameData = NULL;
         uvc->_status = GxDQBuf(uvc->_hDevice, &pFrameData, 1000);
         if(uvc->_status != GX_STATUS_SUCCESS){
             usleep(300);
-            printf("GxDQBuf Failed ret= %d\n",uvc->_status);
+            printf("虹膜数据采集失败！ ret= %d\n",uvc->_status);
             continue;
         }
 
         if(pFrameData != NULL)
         {
             cv::Mat im;
-           // std::cout<<" pFrameData->nHeight:"<<pFrameData->nHeight<<"  pFrameData->nWidth:"<< pFrameData->nWidth<<std::endl;
-           // std::cout<<" pFrameData->nImgSize:"<<pFrameData->nImgSize<<std::endl;
-//            im=cv::Mat(pFrameData->nHeight, pFrameData->nWidth, CV_LOAD_IMAGE_COLOR, (void*)pFrameData->pImgBuf);
-//            im.
-             memcpy(reviMat.data, pFrameData->pImgBuf, pFrameData->nImgSize);
-             emit uvc->sigFramed(reviMat);
+            memcpy(reviMat.data, pFrameData->pImgBuf, pFrameData->nImgSize);
+            emit uvc->sigFramed(reviMat);
             //将图像buffer放回库中
             GxQBuf(uvc->_hDevice,pFrameData);
         }
         else
         {
-            printf("GxDQBuf failed&&&&&&&&&&&&&&&&&&&&&&&&&&&\n");
+            printf("虹膜数据采集失败\n");
         }
     }
     uvc->_runing= false;

@@ -21,7 +21,10 @@
 #include <stdio.h>
 #include<qdebug.h>
 #include <omp.h>
+#include<QSqlQuery>
 //#include<stdlib.h>
+#include<QMessageBox>
+#include<QSqlError>
 #include<string.h>
 ////#include<stdio.h>
 ///
@@ -199,6 +202,7 @@ void IRIS_Algorith::setIndentCount(int size){
     }
 
 }
+
 /*****************************************************************************
 *                        函数
 *  函 数 名：setEnrollCount
@@ -257,11 +261,11 @@ bool IRIS_Algorith::SaveFeature(JD_IRIS_TEMPLATE *l, JD_IRIS_TEMPLATE *r, IRIS_M
     _pleftT.push_back(tl);
 
 
-    JD_IRIS_TEMPLATE *tr = new JD_IRIS_TEMPLATE();
-    tr->nLength=r->nLength;
-    tr->pData = new char[tr->nLength];
-    memcpy(tr->pData,r->pData,tr->nLength);
-    _prightT.push_back(tr);
+    JD_IRIS_TEMPLATE *jd_tr = new JD_IRIS_TEMPLATE();
+    jd_tr->nLength=r->nLength;
+    jd_tr->pData = new char[jd_tr->nLength];
+    memcpy(jd_tr->pData,r->pData,jd_tr->nLength);
+    _prightT.push_back(jd_tr);
 
     _images.push_back(im);
 
@@ -290,37 +294,39 @@ bool IRIS_Algorith::SaveFeature(JD_IRIS_TEMPLATE *l, JD_IRIS_TEMPLATE *r, IRIS_M
         }
 
         if(nStatus1==JD_STATUS_OK&& nStatus2==JD_STATUS_OK){
+            QSqlQuery query;
+            query.prepare("INSERT INTO irisdata(uid,name,depart_name,l_1_tc,l_2_tc,l_3_tc,r_1_tc,r_2_tc,r_3_tc) VALUES(:uid,:name,:depart_name,:l_1_tc,:l_2_tc,:l_3_tc,:r_1_tc,:r_2_tc,:r_3_tc)");
 
-
-            QSqlRecord record = _pIrisDataModel->record();
-            record.setValue("uid", _user.id);
-            record.setValue("name", _user.name);
-            record.setValue("depart_name", _user.depart_name);
+            query.bindValue(":uid", _user.id);
+            query.bindValue(":name", _user.name);
+            query.bindValue(":depart_name", _user.depart_name);
             int li=1,ri=1;
             for(int index=0;index<nTemplatesNum;index++){
                 if(pIndex1[index]==1&&li<=3){
-                    QString tb = QString("l_%1_tc").arg(li);
+                    QString tb = QString(":l_%1_tc").arg(li);
                     QByteArray str(_pleftT.at(li)->pData,_pleftT.at(li)->nLength);
-                    record.setValue(tb,  str);
+                    query.bindValue(tb,  str);
                     li++;
                 }
 
                 if(pIndex2[index]==1&& ri<=3){
-                    QString tb = QString("r_%1_tc").arg(ri);
+                    QString tb = QString(":r_%1_tc").arg(ri);
                     //std::string str = (char*)_pleftT.at(ri)->pData;
                     QByteArray str(_prightT.at(ri)->pData,_prightT.at(ri)->nLength);
-                    record.setValue(tb,  str);
+                    query.bindValue(tb,  str);
                     ri++;
                 }
                 _imagemanager.SaveImage(_user.id,index,_images.at(index).im);
             }
-            _pIrisDataModel->insertRecord(-1, record);
-            bool isok =_pIrisDataModel->submitAll();
-            if(isok){
-                std::cout<<"cun chu cheng gong!!"<<std::endl;
+            query.exec();
+
+            if(!query.isActive())
+            {
+                QMessageBox::warning(NULL,tr("数据库存储虹膜信息失败"),query.lastError().text());
             }else{
-                std::cout<<"cun chu shi bai !"<<std::endl;
+                std::cout<<"存储虹膜信息成功!!"<<std::endl;
             }
+
             emit sigEnrollSuccess(PromptFlag::IRIS_SUCCESS);
 
             //zu ce cheng gong

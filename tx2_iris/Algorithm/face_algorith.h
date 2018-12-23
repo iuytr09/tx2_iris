@@ -9,6 +9,24 @@
 #include "../jdFace_sdk_2.0.0/visi_face.h"
 #include "Worker/faceworker.h"
 
+struct FaceDataTP
+{
+    FaceDataTP(){}
+    FaceDataTP(int id,int uid,QString name,QString depart_name) {
+        _id=id;
+        _uid =uid;
+        _name = name;
+        _depart_name = depart_name;
+    }
+    int _id;
+    int _uid;
+    QString _name;
+    QString _depart_name;
+    std::vector<float> _facetm;
+
+};
+
+
 class Face_Algorith : public QObject
 {
     Q_OBJECT
@@ -46,7 +64,7 @@ public:
     void SetIdentifyWork();
     void SetEnrollWork();
     void SetNoWork();
-   // void LoginIdentify();
+    // void LoginIdentify();
     void UpdateImage(cv::Mat im);
 
     void CodeCompare(std::vector<float> source);
@@ -62,15 +80,17 @@ private:
 
 
 signals:
-    sigEnrollSuccess(int state,std::vector<float> &face_box, cv::Mat &out_face);
-    sigIdentSuccess(int, std::vector<std::vector<float>>);
+    sigEnrollSucsses();
+    sigIdentSucsses(PersonInfo info);
+    sigEnrollState(int state,std::vector<float> &face_box, cv::Mat &out_face);
+    sigIdentState(int, std::vector<std::vector<float>>);
 public slots:
 
 private:
     int _statue;
     PersonInfo _user;
     QSqlTableModel *_pFaceDataModel;
-    std::vector<std::vector<float>> _vfaceExist;
+//    std::vector<std::vector<float>> _vfaceExist;
     bool _isSetPerson;
 
     FeatureManage  _imagemanager;
@@ -79,6 +99,7 @@ private:
     QMutex _save_im_mutex;//实例互斥锁。
     static QMutex _face_alg_mutex;//实例互斥锁。
     static Face_Algorith *_face_alg_instance;/*!<使用原子指针,默认初始化为0。*/
+    std::vector<FaceDataTP> _faceDataTPs;
 
 
 

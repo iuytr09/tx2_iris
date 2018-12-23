@@ -81,18 +81,7 @@ enum DistanceValue
     NoPersonDistanceValue   =   35  //无人，单位cm
 };
 
-//位置信息标志
-enum IrisPositionFlag
-{
-    Far				=	0,	//位置偏远
-    Near			=	1,  //位置偏近
-    Left			=	2,  //位置偏左
-    Right			=	3,  //位置偏右
-    Up				=	4,  //位置偏上
-    Down			=	5,  //位置偏下
-    OK				=	6,  //位置合适
-    Unknown         =   7   //位置未知，不用提示
-};
+
 
 //注册图像个数
 const int g_constMaxEnrollImNum =	3;		//注册过程中算法允许的最大注册图像数

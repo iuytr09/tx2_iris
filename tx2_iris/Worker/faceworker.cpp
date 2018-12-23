@@ -31,9 +31,10 @@ void * FaceWorker::FaceThread(void* arg){
     while(e->_isruning){
 
         if(e->_isReady){
+            cv::Mat im;
             QMutexLocker locker(& e->_face_mutex);
-           e->_isReady = false;
-           cv::Mat im =  e->_im;
+            e->_isReady = false;
+           im= e->_im.clone();
            locker.unlock();
            if(im.empty())
            {
@@ -48,11 +49,11 @@ void * FaceWorker::FaceThread(void* arg){
                std::vector<cv::Mat> out_faces;
                int state = get_all_faces(im,face_boxs,out_faces);
                if(state==0){
-                   emit e->am->sigIdentSuccess(1,face_boxs);
+                   emit e->am->sigIdentState(1,face_boxs);
                    std::vector<float> fbox;
                    std::vector<float> feat;
 
-                   state= extract_feature(im, fbox,feat, 0.2);
+                   state= extract_feature(im, fbox,feat,2);
                    locker.unlock();
                    if(state==0)
                    {
@@ -67,15 +68,16 @@ void * FaceWorker::FaceThread(void* arg){
                std::vector<float> fbox;
                cv::Mat reg_face;
                std::vector<float> feat;
-               int state = face_register(im, fbox, reg_face, feat,1);
+               int state = face_register(im, fbox, reg_face, feat,2);
                if(state==0){
                    if(e->am->SaveFeature(feat,im,reg_face)){
-                       emit  e->am->sigEnrollSuccess(0,fbox,reg_face);//cheng gong
+                       e->_fs = FaceState::FaceUnknown;
+                       emit  e->am->sigEnrollState(0,fbox,reg_face);//cheng gong
                    }else{
-                       emit  e->am->sigEnrollSuccess(-10,fbox,reg_face); //shi bai
+                       emit  e->am->sigEnrollState(-10,fbox,reg_face); //cun chu shi bai
                    }
                }else{
-                   emit  e->am->sigEnrollSuccess(state,fbox,reg_face);
+                   emit  e->am->sigEnrollState(state,fbox,reg_face);
                }
 
 

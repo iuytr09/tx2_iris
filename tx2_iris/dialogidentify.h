@@ -61,6 +61,7 @@ public slots:
 
     void timerEvent(QTimerEvent *event);//界面时间更新
     void slotImageUpdate(cv::Mat im);     //界面图像更新
+    void updateIdentState(int, std::vector<std::vector<float>>);
     void IrisImageUpdate(QImage im); //hong mo
     void StopIdent();       //停止识别
 
@@ -69,6 +70,7 @@ public slots:
 
     void IdentResult(int flag);         //考勤识别结果
     void LoginIdentResult(long personIndex, int flag);                      //管理员登陆识别结果
+    void IdentFaceResult(PersonInfo info);         //考勤识别结果
 
 private:
 
@@ -98,6 +100,8 @@ private:
  //   LRIrisClearFlag  _irisClearFlag;
     IdentResultState  _identResultState;           //识别结果
     QTimer *_timerStartIdent;                      //识别成功或失败时显示框显示1s钟
+
+    QImage  _top_im;   //hui zhi xian kuang
 
 };
 
