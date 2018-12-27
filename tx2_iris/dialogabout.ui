@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>848</width>
+    <height>663</height>
    </rect>
   </property>
   <property name="font">
@@ -332,7 +332,7 @@
         <string notr="true">color:rgb(0, 0, 0)</string>
        </property>
        <property name="text">
-        <string>北京上古视觉科技有限公司</string>
+        <string> 北京上古视觉科技有限公司</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>

@@ -52,10 +52,10 @@
         </font>
        </property>
        <property name="text">
-        <string>返回</string>
+        <string>返回 </string>
        </property>
        <property name="icon">
-        <iconset>
+        <iconset resource="tx2_iris.qrc">
          <normaloff>:/image/返回.png</normaloff>:/image/返回.png</iconset>
        </property>
        <property name="iconSize">
@@ -83,7 +83,7 @@
         <string>保存</string>
        </property>
        <property name="icon">
-        <iconset>
+        <iconset resource="tx2_iris.qrc">
          <normaloff>:/image/保存.png</normaloff>:/image/保存.png</iconset>
        </property>
        <property name="iconSize">
@@ -149,6 +149,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="tx2_iris.qrc"/>
+ </resources>
  <connections/>
 </ui>

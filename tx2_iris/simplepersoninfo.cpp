@@ -12,3 +12,4 @@ SimplePersonInfo::~SimplePersonInfo()
 {
     delete ui;
 }
+

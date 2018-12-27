@@ -54,7 +54,7 @@
         </font>
        </property>
        <property name="text">
-        <string>返回</string>
+        <string>返回 </string>
        </property>
        <property name="icon">
         <iconset resource="tx2_iris.qrc">

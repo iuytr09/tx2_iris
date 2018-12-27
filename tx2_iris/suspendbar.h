@@ -28,6 +28,7 @@ class SuspendBar;
 class SuspendBar : public QWidget
 {
     Q_OBJECT
+
     
 public:
     explicit SuspendBar(QWidget *parent = 0);

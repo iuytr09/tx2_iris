@@ -108,6 +108,9 @@
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEditQualityScore">
+    <property name="dragEnabled">
+     <bool>true</bool>
+    </property>
     <property name="readOnly">
      <bool>true</bool>
     </property>

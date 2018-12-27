@@ -22,6 +22,7 @@
 #include <QDir>
 
 
+
 ////播放语音的MediaObject
 QMediaPlayer* Interaction:: s_sound = nullptr;
 

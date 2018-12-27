@@ -160,7 +160,7 @@
         </font>
        </property>
        <property name="text">
-        <string>姓名：</string>
+        <string>姓 名：</string>
        </property>
       </widget>
      </item>

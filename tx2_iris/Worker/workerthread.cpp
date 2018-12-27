@@ -6,6 +6,7 @@
 //IRIS_Algorith* am= IRIS_Algorith::GetInstance();
 //JD_IRIS* dev =am->GetJD_IRIS();
 
+
 WorkerThread::WorkerThread(QObject *parent) :
     QThread(parent),_isruning(false){
 

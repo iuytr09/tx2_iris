@@ -33,7 +33,6 @@ SuspendBar::SuspendBar(QWidget *parent) :
     connect(ui->btnIrisLogin,SIGNAL(clicked()),this,SLOT(showBtnIdent()));
     connect(ui->btnIdent,SIGNAL(clicked()),this,SLOT(hideBtnIdent()));
 }
-
 SuspendBar::~SuspendBar()
 {
     delete ui;

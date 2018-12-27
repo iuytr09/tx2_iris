@@ -25,6 +25,7 @@ MessageBox::MessageBox(QWidget *parent) :
 {
     ui->setupUi(this);
 
+
     setWindowFlags(Qt::CustomizeWindowHint);
     //ui->widgetBack->setBackgroundColor(QColor(220,220,220));
  //   ui->widgetTitle->setBackgroundColor(QColor(71,71,71));

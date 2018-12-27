@@ -29,6 +29,7 @@
 const QString IMAGE_FORMAT("jpg");
 
 
+
 namespace Ui {
 class DetailPersonInfo;
 }

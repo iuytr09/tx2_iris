@@ -20,6 +20,7 @@
 #include "ui_dialogabout.h"
 #include <QMouseEvent>
 
+
 DialogAbout::DialogAbout(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogAbout)

@@ -82,7 +82,7 @@
          <string notr="true">color: rgb(0, 0, 0);</string>
         </property>
         <property name="text">
-         <string>状态..</string>
+         <string>状 态..</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>

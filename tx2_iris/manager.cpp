@@ -23,6 +23,7 @@ Manager::Manager(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Manager)
 {
+
     ui->setupUi(this);
     connect(ui->toolBtnDataManager,SIGNAL(clicked()),this,SIGNAL(sigDataManger()));
     connect(ui->toolBtnHelp,SIGNAL(clicked()),this,SIGNAL(sigHelp()));

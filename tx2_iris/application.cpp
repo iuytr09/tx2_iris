@@ -24,6 +24,7 @@
 Application::Application(int &argc, char **argv):
     QApplication(argc,argv)
 {
+
     /**********定时器*****************/
     //新建定时器
     timer = new QTimer();

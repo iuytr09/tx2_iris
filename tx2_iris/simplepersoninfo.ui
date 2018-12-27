@@ -31,7 +31,7 @@
     <enum>QFrame::Panel</enum>
    </property>
    <property name="text">
-    <string>张唯心</string>
+    <string>张唯心 </string>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">

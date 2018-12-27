@@ -8,6 +8,7 @@ QMutex IrisVideo::_iris_v_mutex;
 IrisVideo* IrisVideo::_iris_v_instance = NULL;
 
 
+
 static IrisVideo *IrisVideo::GetInstance()
 {
     /*! testAndSetOrders操作保证在原子操作前和后的的内存访问

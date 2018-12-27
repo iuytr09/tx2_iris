@@ -79,7 +79,7 @@
            </font>
           </property>
           <property name="text">
-           <string>用户登录</string>
+           <string>用户登录 </string>
           </property>
           <property name="icon">
            <iconset resource="tx2_iris.qrc">

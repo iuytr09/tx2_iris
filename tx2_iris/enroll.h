@@ -30,8 +30,6 @@
 #include <condition_variable>
 #include "interaction.h"
 
-
-
 namespace Ui {
 class Enroll;
 }

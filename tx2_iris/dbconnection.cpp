@@ -6,6 +6,7 @@
 #include "dbconnection.h"
 
 
+
 static bool gIsConn=false;
 bool createConnection(QWidget* parent)
 {

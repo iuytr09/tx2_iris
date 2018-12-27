@@ -34,6 +34,7 @@ QMutex IRIS_Algorith::_alg_mutex;
 IRIS_Algorith* IRIS_Algorith::_alg_instance = NULL;
 
 
+
 /*****************************************************************************
 *                        函数
 *  函 数 名：IRIS_Algorith
@@ -327,15 +328,13 @@ bool IRIS_Algorith::SaveFeature(JD_IRIS_TEMPLATE *l, JD_IRIS_TEMPLATE *r, IRIS_M
                 std::cout<<"存储虹膜信息成功!!"<<std::endl;
             }
 
-            emit sigEnrollSuccess(PromptFlag::IRIS_SUCCESS);
+            emit sigIrisState(InteractionResultType::IrisEnrollSuccess,IrisPositionFlag::Unknown);
 
             //zu ce cheng gong
 
         }else{
             //zu ce shi bai ;
-            emit sigEnrollSuccess(PromptFlag::IRIS_FAIL);
-
-
+            emit sigIrisState(InteractionResultType::IrisEnrollFailed,IrisPositionFlag::Unknown);
         }
 
 
@@ -499,12 +498,12 @@ void IRIS_Algorith::Enroll(cv::Mat im){
         if(!_isSetPerson){
 
             //qing shou xian she zhi zu ce yong hu!
-            qDebug()<<"请首先设置注册用户，再进行虹膜注册!";
+            //qDebug()<<"请首先设置注册用户，再进行虹膜注册!";
             return;
         }
 
         if(_isEnrollStop){
-            qDebug()<<"注册已取消!";
+           // qDebug()<<"注册已取消!";
             return;
         }
         _vEnrollworkers.at(_curEIndex)->Push(im);//.clone());
@@ -539,7 +538,7 @@ void IRIS_Algorith::Identify(cv::Mat im){
     if(_isOK){
         //声明存放定位结果的变量
         if(_isIdentStop){
-            qDebug()<<"停止识别!";
+           // qDebug()<<"停止识别!";
             return;
         }
 
@@ -569,93 +568,7 @@ void IRIS_Algorith::Identify(cv::Mat im){
 *  修改时间：
 *****************************************************************************/
 void IRIS_Algorith::LoginIdentify(cv::Mat im){
-    //    if(_isOK){
-    //声明存放定位结果的变量
-    //        std::vector<st_EYE_LOC_INFO> EyeRect;
-    //        JD_IRIS_STATUS nStatus = _pJD_IRIS->JD_IRIS_EyeLocation(im, EyeRect);
 
-    //        if (JD_STATUS_OK == nStatus){
-
-    //            double dQuality=0.0;
-    //            if (EyeRect.size()>0){
-
-    //                //left
-    //                nStatus = _pJD_IRIS->JD_IRIS_IrisQuality(im,EyeRect[0], dQuality);
-    //                if(JD_STATUS_OK == nStatus && dQuality>0.85){
-    //                    int nMaxLen;
-    //                    _pJD_IRIS->JD_IRIS_GetFeatureLen(&nMaxLen);
-    //                    JD_IRIS_TEMPLATE pTempCode;// = new JD_IRIS_TEMPLATE();
-    //                    pTempCode.nLength = 0;
-    //                    pTempCode.pData = new unsigned char[nMaxLen];
-    //                    //虹膜特征提取
-    //                    if(JD_STATUS_OK == nStatus)
-    //                    {
-    //                        nStatus = _pJD_IRIS->JD_IRIS_GetIrisFeatureCode(im,EyeRect[0], &pTempCode);
-    //                        if(JD_STATUS_OK == nStatus)
-    //                        {
-    //                            codeCompare(&pTempCode);
-    //                            delete[] pTempCode.pData;
-    //                            pTempCode.pData =NULL;
-
-
-    //                        }else{
-    //                            getError(nStatus);
-    //                        }
-    //                    }else{
-    //                        getError(nStatus);
-    //                    }
-    //                }else{
-    //                    getError(nStatus);
-    //                }
-    //            }
-
-    //            dQuality=0.0;
-    //            if(2 == EyeRect.size()){
-
-    //                //right
-    //                nStatus = _pJD_IRIS->JD_IRIS_IrisQuality(im,EyeRect[1], dQuality);
-    //                if(JD_STATUS_OK == nStatus && dQuality>0.85){
-    //                    int nMaxLen;
-    //                    _pJD_IRIS->JD_IRIS_GetFeatureLen(&nMaxLen);
-    //                    JD_IRIS_TEMPLATE pTempCode ;//= new JD_IRIS_TEMPLATE();
-    //                    pTempCode.nLength = 0;
-    //                    pTempCode.pData = new unsigned char[nMaxLen];
-    //                    //虹膜特征提取.
-    //                    if(JD_STATUS_OK == nStatus)
-    //                    {
-    //                        nStatus = _pJD_IRIS->JD_IRIS_GetIrisFeatureCode(im,EyeRect[1], &pTempCode);
-    //                        if(JD_STATUS_OK == nStatus)
-    //                        {
-    //                            codeCompare(&pTempCode);
-
-    //                            delete[] pTempCode.pData;
-    //                            pTempCode.pData =NULL;
-    //                        }else{
-    //                            getError(nStatus);
-    //                        }
-    //                    }else{
-    //                        getError(nStatus);
-    //                    }
-    //                }else{
-    //                    getError(nStatus);
-    //                }
-
-    //                //shi bai
-    //                //getError(nStatus);
-    //                return;
-
-    //            }else{
-    //                //dan yan ------xian bu kao lv
-    //                getError(nStatus);
-    //            }
-    //        }else{
-    //            //shi bai
-    //            getError(nStatus);
-    //        }
-    //    }else{
-    //        //hong mo suan fa cun zai wen ti
-    //        qDebug()<<"[Identify]hong mo suan fa cun zai wen ti";
-    //    }
 }
 
 
@@ -692,18 +605,20 @@ void IRIS_Algorith::codeCompareL(JD_IRIS_TEMPLATE* source){
         }
     }
 
-    if(dDist<0.32){
+    if(dDist<0.35){
         //匹配成功
         //record  匹配结果
         _recogUser.id = record.value("uid").toInt();
         _recogUser.name = record.value("name").toString();
         _recogUser.depart_name = record.value("depart_name").toString();
-        emit sigIdentifySuccess(PromptFlag::IRIS_SUCCESS);
+        //        emit sigIdentifySuccess(PromptFlag::IRIS_SUCCESS);
+        emit  sigIdentSucsses(_recogUser);
+
 
 
     }else{
-        emit sigIdentifySuccess(PromptFlag::IRIS_FAIL);
-
+        //        emit sigIdentifySuccess(PromptFlag::IRIS_FAIL);
+        emit sigIrisState(InteractionResultType::IrisIdenFailed,IrisPositionFlag::Unknown);
     }
 
 
@@ -746,41 +661,89 @@ void IRIS_Algorith::codeCompareR(JD_IRIS_TEMPLATE* source){
         _recogUser.id = record.value("uid").toInt();
         _recogUser.name = record.value("name").toString();
         _recogUser.depart_name = record.value("depart_name").toString();
-        emit sigIdentifySuccess(PromptFlag::IRIS_SUCCESS);
+        emit sigIrisState(InteractionResultType::IrisIdenSuccess,IrisPositionFlag::Unknown);
 
     }else{
-        emit sigIdentifySuccess(PromptFlag::IRIS_FAIL);
+               emit sigIrisState(InteractionResultType::IrisIdenFailed,IrisPositionFlag::Unknown);
     }
 }
 
-/*****************************************************************************
-*                        函数
-*  函 数 名：SendIdentState
-*  功    能：发送识别状态
-*  说    明：
-*  参    数：
-*  返 回 值：
-*  创 建 人：liuzhch
-*  创建时间：2018-12-05
-*  修 改 人：
-*  修改时间：
-*****************************************************************************/
-void IRIS_Algorith::SendIdentState(int state){
-    emit sigIdentifySuccess(state);
-}
+///*****************************************************************************
+//*                        函数
+//*  函 数 名：SendIdentState
+//*  功    能：发送识别状态
+//*  说    明：
+//*  参    数：
+//*  返 回 值：
+//*  创 建 人：liuzhch
+//*  创建时间：2018-12-05
+//*  修 改 人：
+//*  修改时间：
+//*****************************************************************************/
+//void IRIS_Algorith::SendIdentState(int state){
+//    //emit sigIdentifySuccess(state);
+//}
+
+///*****************************************************************************
+//*                        函数
+//*  函 数 名：SendEnrollState
+//*  功    能：发送注册状态
+//*  说    明：
+//*  参    数：
+//*  返 回 值：
+//*  创 建 人：liuzhch
+//*  创建时间：2018-12-05
+//*  修 改 人：
+//*  修改时间：
+//*****************************************************************************/
+//void IRIS_Algorith::SendEnrollState(int state){
+//    emit sigEnrollSuccess(state);
+//}
 
 /*****************************************************************************
 *                        函数
-*  函 数 名：SendEnrollState
-*  功    能：发送注册状态
+*  函 数 名： GetTip
+*  功    能： 根据位置判断提示
 *  说    明：
 *  参    数：
 *  返 回 值：
 *  创 建 人：liuzhch
-*  创建时间：2018-12-05
+*  创建时间：2018-12-25
 *  修 改 人：
 *  修改时间：
 *****************************************************************************/
-void IRIS_Algorith::SendEnrollState(int state){
-    emit sigEnrollSuccess(state);
+IrisPositionFlag IRIS_Algorith::GetTip(cv::Rect ret){
+    int far = 20;//小 远
+    int near = 120;//大  近
+    int left =50;
+    int right = 3000;
+    int up = 50;
+    int down = 2000;
+
+    if(ret.x<left){
+        return IrisPositionFlag::Left;
+    }else{
+        return IrisPositionFlag::Right;
+    }
+
+    if(ret.width<far){
+        return IrisPositionFlag::Far;
+    }else if (ret.width>near){
+        return IrisPositionFlag::Near;
+    }else{
+        if(ret.x<left){
+            return IrisPositionFlag::Left;
+        }else if (ret.x>right){
+            return IrisPositionFlag::Right;
+        }else{
+            if(ret.y<up){
+                return IrisPositionFlag::Up;
+            }else if (ret.y>down){
+                return IrisPositionFlag::Down;
+            }else{
+                return IrisPositionFlag::OK;
+            }
+        }
+    }
+
 }

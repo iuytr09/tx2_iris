@@ -27,6 +27,7 @@ namespace Ui {
 class DepartManage;
 }
 
+
 class DepartManage : public QDialog
 {
     Q_OBJECT

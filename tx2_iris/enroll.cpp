@@ -66,11 +66,12 @@ Enroll::Enroll(QWidget *parent) :
 {
     ui->setupUi(this);
 
+
     setWindowFlags(Qt::CustomizeWindowHint);
     setWindowFlags(Qt::FramelessWindowHint);
     setGeometry(QRect(0, 0, 800, 600));
 
-    qRegisterMetaType<LRSucFailFlag>("LRSucFailFlag");
+//    qRegisterMetaType<LRSucFailFlag>("LRSucFailFlag");
     qRegisterMetaType<IrisPositionFlag>("IrisPositionFlag");
 
     _dialogEnroll = new DialogEnroll(this);

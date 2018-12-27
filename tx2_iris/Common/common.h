@@ -26,6 +26,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 using namespace cv;
 
+
 //参数输入输出指示宏定义
 #define IN
 #define OUT
@@ -49,39 +50,43 @@ const int IMAGE_SIZE = IMAGE_WIDTH * IMAGE_HEIGHT;
 //错误码定义
 const int E_OK = 0;       //操作成功
 
-
-
-//注册、识别成功失败标志
-enum LRSucFailFlag
+//人机交互结果类型
+enum InteractionResultType
 {
-    EnrRecBothFailed	=	-3,		//EnrRecBothFailed：注册、识别时左右眼均注册或识别失败
-    EnrRecRightFailed	=	-2,		//EnrRecRightFailed:右眼注册、识别失败导致注册或识别失败,左眼情况未知
-    EnrRecLeftFailed	=	-1,		//EnrRecLeftFailed:左眼注册、识别失败导致注册或识别失败,右眼情况未知
-    EnrRecUnknown       =   0,      //EnrRecUnknown:注册、识别结果未知
-    EnrRecLeftSuccess	=	1,		//EnrRecLeftSuccess:注册、识别时仅左眼注册或识别成功
-    EnrRecRightSuccess	=	2,		//EnrRecRightSuccess:注册、识别时仅右眼注册或识别成功
-    EnrRecBothSuccess	=	3		//EnrRecBothSuccess:注册、识别时左右眼均注册成功
+    IrisEnrollSuccess,  //虹膜注册成功
+    IrisEnrollFailed,   //虹膜注册失败
+    IrisEnrollGlassesExist,   //虹膜注册存在带眼镜
+    IrisEnrollSangleEye,   //虹膜注册存在单只眼睛
+//    IrisEnrollQuality,   //虹膜注册质量差
+    IrisEnrollPerformig,//虹膜注册中 位置信息有效
+    IrisIdenSuccess,    //虹膜识别成功
+    IrisIdenFailed,     //虹膜识别失败
+    IrisIdenKeepLastStatus,//保存识别上一次结果状态，只界面显示，不播放语音
+    IrisIdenPerforming, //虹膜识别中
+    FaceEnrollSuccess,  //人脸注册成功
+    FaceEnrollFailed,   //人脸注册失败
+    FaceEnrollPerformig,//人脸注册中  位置信息有效
+    FaceIdenSuccess,    //人脸识别成功
+    FaceIdenFailed,     //人脸识别失败
+    FaceIdenforming, //人脸识别中
+    ResultUnknown   //结果未知或者目前没有结果
+
 };
 
-//图像清晰标志
-enum LRIrisClearFlag
+//位置信息标志
+enum IrisPositionFlag
 {
-    LAndRImgBlur	=	0,	//左眼、右眼图像都不合格；
-    LImgClear		=	1,	//左眼图像合格
-    RImgClear		=	2,	//右眼图像合格
-    LAndRImgClear	=	3	//左眼、右眼图像都合格
+    Far				=	0,	//位置偏远
+    Near			=	1,  //位置偏近
+    Left			=	2,  //位置偏左
+    Right			=	3,  //位置偏右
+    Up				=	4,  //位置偏上
+    Down			=	5,  //位置偏下
+    OK				=	6,  //位置合适
+    POSEWRONG       =   7,  //位置不正
+    Quality         =   8,  //质量不合格
+    Unknown         =   9   //位置未知，不用提示
 };
-
-//红外测距模块返回值含义
-enum DistanceValue
-{
-    NearDistanceValue       =   25, //距离过近值，单位cm
-    OKDistanceValue         =   29, //距离合适值，单位cm
-    FarDistanceValue        =   33, //距离过远值，单位cm
-    NoPersonDistanceValue   =   35  //无人，单位cm
-};
-
-
 
 //注册图像个数
 const int g_constMaxEnrollImNum =	3;		//注册过程中算法允许的最大注册图像数

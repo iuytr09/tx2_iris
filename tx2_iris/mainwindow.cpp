@@ -27,6 +27,7 @@
 #include <QMetaType>
 
 
+
 ReDrawEvent drawEvent;
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -35,6 +36,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    //InteractionResultType::FaceIdenFailed,IrisPositionFlag
+    qRegisterMetaType<InteractionResultType> ("InteractionResultType");
+    qRegisterMetaType<IrisPositionFlag> ("IrisPositionFlag");
     qRegisterMetaType<cv::Mat> ("cv::Mat");
     qRegisterMetaType<PersonInfo> ("PersonInfo");
     qRegisterMetaType<std::vector<std::vector<float>>>("std::vector<std::vector<float>>");
@@ -198,7 +202,7 @@ MainWindow::~MainWindow()
 
 }
 
- int i_im_count=0;
+int i_im_count=0;
 
 void MainWindow::iris_image(cv::Mat im){
     i_im_count++;

@@ -4,6 +4,7 @@
 #include<QThreadPool>
 
 
+
 enum RunType{
     UNKNOWN = 0,
     Enroll =1,

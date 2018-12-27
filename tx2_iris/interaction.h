@@ -32,34 +32,6 @@
 
 const int g_constSoundInterval = 5;//发声间隔，只对注册中、识别中播放语音有效
 
-//人机交互结果类型
-enum InteractionResultType
-{
-    EnrollSuccess,  //注册成功
-    EnrollFailed,   //注册失败
-    EnrollPerformig,//注册中
-    IdenSuccess,    //识别成功
-    IdenFailed,     //识别失败
-    IdenKeepLastStatus,//保存识别上一次结果状态，只界面显示，不播放语音
-    IdenPerforming, //识别中
-    ResultUnknown   //结果未知或者目前没有结果
-
-};
-
-//位置信息标志
-enum IrisPositionFlag
-{
-    Far				=	0,	//位置偏远
-    Near			=	1,  //位置偏近
-    Left			=	2,  //位置偏左
-    Right			=	3,  //位置偏右
-    Up				=	4,  //位置偏上
-    Down			=	5,  //位置偏下
-    OK				=	6,  //位置合适
-    Unknown         =   7   //位置未知，不用提示
-};
-
-
 
 class Interaction : public QObject
 {

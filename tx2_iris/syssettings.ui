@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>817</width>
     <height>600</height>
    </rect>
   </property>
@@ -125,7 +125,7 @@
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <property name="usesScrollButtons">
       <bool>true</bool>
@@ -151,7 +151,7 @@
           </font>
          </property>
          <property name="title">
-          <string>IP设置</string>
+          <string>IP设置 </string>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="0" column="0">

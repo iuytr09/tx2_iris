@@ -104,7 +104,7 @@
             <string notr="true">color:rgb(255, 255, 255)</string>
            </property>
            <property name="text">
-            <string>用户名登陆</string>
+            <string>用户名登陆 </string>
            </property>
           </widget>
          </item>

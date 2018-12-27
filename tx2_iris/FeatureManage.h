@@ -27,6 +27,7 @@
 const int g_constMaxEnrFeatureNum = 100;
 const int g_constUserNameLen = 20;
 
+
 enum FeatureFlag
 {
     FeatureLeft = 0,

@@ -26,6 +26,7 @@ DataManage::DataManage(QWidget *parent) :
 {
     ui->setupUi(this);
 
+
     //连接信号与槽参数，使相应的信号得到想对应的处理
     connect(ui->btnBack, SIGNAL(clicked()), this, SIGNAL(sigGoBack()));
     connect(ui->btnImport, SIGNAL(clicked()), this, SLOT(slotImport()));

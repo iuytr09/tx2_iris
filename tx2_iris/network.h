@@ -28,6 +28,7 @@ enum IPVersion{ipV4 = 0, ipV6 = 1};
 
 //bool isValid(const std::string addr);
 
+
 class NetWork
 {
 public:

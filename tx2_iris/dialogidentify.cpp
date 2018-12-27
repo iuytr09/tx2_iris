@@ -37,6 +37,7 @@ using namespace cv;
 
 
 
+
 DialogIdentify::DialogIdentify(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::DialogIdentify)
@@ -67,8 +68,11 @@ DialogIdentify::DialogIdentify(QWidget *parent) :
     _pFaceAlgorith->StartWorker();
 
     connect(_pFaceAlgorith,SIGNAL(sigIdentSucsses(PersonInfo)),this,SLOT(IdentFaceResult(PersonInfo)));
-    connect(_pFaceAlgorith,SIGNAL(sigIdentState(int, std::vector<std::vector<float>>)),this,SLOT(updateIdentState(int, std::vector<std::vector<float>>)));
+    //    connect(_pFaceAlgorith,SIGNAL(sigIdentState(int, std::vector<std::vector<float>>)),this,SLOT(updateIdentState(int, std::vector<std::vector<float>>)));
+    connect(_pFaceAlgorith,SIGNAL(sigFaceState(InteractionResultType,IrisPositionFlag)),this,SLOT(slotFaceState(InteractionResultType,IrisPositionFlag)));
     _pUsbVideoCap = UsbVideoCap::GetInstance();
+
+
     if(connect(_pUsbVideoCap,SIGNAL(OnUpdateImage(cv::Mat)),this,SLOT(slotImageUpdate(cv::Mat))))
     {
         std::cout<<"guan lian chenggong!"<<std::endl;
@@ -86,11 +90,21 @@ DialogIdentify::~DialogIdentify()
 }
 
 void DialogIdentify::IdentFaceResult(PersonInfo info){
-
-    ui->labStatu->setText(info.name + "shi bie cheng gong!");
+    ui->labStatu->setText(info.name + " 人脸识别成功!");
 }
 
-//gen ju state chenge pen  colors
+/*****************************************************************************
+*                        函数
+*  函 数 名：updateIdentState
+*  功    能： 根据状态改变画笔的颜色 绘制动态框
+*  说    明：
+*  参    数：
+*  返 回 值：
+*  创 建 人：liuzhch
+*  创建时间：2018-12-25
+*  修 改 人：
+*  修改时间：
+*****************************************************************************/
 void DialogIdentify::updateIdentState(int state, std::vector<std::vector<float>> face_boxs){
     _top_im.fill(0);
 
@@ -127,13 +141,32 @@ void DialogIdentify::updateIdentState(int state, std::vector<std::vector<float>>
             QRect rect(int(lt_x),int(lt_y),int(rb_x),int(rb_y));//构造一个矩形
             std::cout<<int(lt_x)<<" "<<int(lt_y)<<" "<<int(rb_x)<<" "<<int(rb_y)<<std::endl;
             painter.drawRect(int(lt_x),int(lt_y),int(rb_x)-int(lt_x),int(rb_y)-int(lt_y));
-           // painter.drawRect(rect);
+            // painter.drawRect(rect);
         }
     }
     painter.end();
 
 }
 
+/*****************************************************************************
+*                        函数
+*  函 数 名：updateIdentState
+*  功    能： 根据状态改变画笔的颜色 绘制动态框
+*  说    明：
+*  参    数：
+*  返 回 值：
+*  创 建 人：liuzhch
+*  创建时间：2018-12-25
+*  修 改 人：
+*  修改时间：
+*****************************************************************************/
+void DialogIdentify::slotFaceState(InteractionResultType ret,IrisPositionFlag flag){
+    std::cout<<"InteractionResultType:"<<ret<<", IrisPositionFlag:"<<flag<<std::endl;
+
+    //1\ kong zhi hong wei deng
+    //2\ kongzhi hong mo shi bie
+
+}
 /*****************************************************************************
 *                        开始识别
 *  函 数 名： StartIdent

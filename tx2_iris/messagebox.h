@@ -24,7 +24,9 @@
 
 namespace Ui {
 class MessageBox;
+
 }
+
 
 class MessageBox : public QDialog
 {

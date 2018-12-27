@@ -10,6 +10,8 @@ class SimplePersonInfo;
 class SimplePersonInfo : public QWidget
 {
     Q_OBJECT
+
+
     
 public:
     explicit SimplePersonInfo(QWidget *parent = 0);

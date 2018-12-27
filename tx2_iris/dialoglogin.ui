@@ -46,7 +46,16 @@
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <property name="margin">
+    <property name="leftMargin">
+     <number>10</number>
+    </property>
+    <property name="topMargin">
+     <number>10</number>
+    </property>
+    <property name="rightMargin">
+     <number>10</number>
+    </property>
+    <property name="bottomMargin">
      <number>10</number>
     </property>
     <property name="spacing">
@@ -176,7 +185,7 @@
        <string notr="true">color:rgb(0, 0, 0)</string>
       </property>
       <property name="text">
-       <string>确定</string>
+       <string>确 定</string>
       </property>
       <property name="default">
        <bool>true</bool>
@@ -232,7 +241,7 @@
        <string notr="true">color:rgb(0, 0, 0)</string>
       </property>
       <property name="text">
-       <string>取消</string>
+       <string>取 消</string>
       </property>
      </widget>
     </item>
@@ -276,7 +285,16 @@
     <string notr="true"/>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_2">
-    <property name="margin">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
      <number>0</number>
     </property>
     <item>
@@ -309,7 +327,7 @@
     </item>
    </layout>
   </widget>
-  <zorder>layoutWidget</zorder>
+  <zorder>layoutWidget_1</zorder>
   <zorder>label</zorder>
   <zorder>layoutWidget</zorder>
   <zorder>widgetTitle</zorder>

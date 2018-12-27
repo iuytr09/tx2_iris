@@ -10,6 +10,7 @@ EnrollWorker::EnrollWorker(QObject *parent) : QObject(parent),_isruning(false)
     _eid=std::thread(EnrolThread, (void*)this);
 }
 
+
 EnrollWorker::~EnrollWorker()
 {
     _isruning=false;
@@ -51,6 +52,7 @@ void * EnrollWorker::EnrolThread(void* arg){
                         bool isok_t2=false;
                         double dQualityL=0.0;
                         double dQualityR=0.0;
+                        emit e->am->sigIrisState(InteractionResultType::IrisEnrollPerformig,e->am->GetTip(EyeRect.at(0).EyeRect));
 #pragma omp parallel sections
                         {
 #pragma omp section
@@ -114,18 +116,30 @@ void * EnrollWorker::EnrolThread(void* arg){
 
 
                         if(isok_t1&&isok_t2){
-                            IRIS_Mat_Quality iris_im;
-                            iris_im.im = im;
-                            iris_im.leftQuality = dQualityL;
-                            iris_im.rightQuality=dQualityR;
-                            e->am->SaveFeature(&pTempCode1,&pTempCode2,iris_im);
+                            if(dQualityR>0.85&&dQualityL>0.85){
+                                IRIS_Mat_Quality iris_im;
+                                iris_im.im = im;
+                                iris_im.leftQuality = dQualityL;
+                                iris_im.rightQuality= dQualityR;
+                                e->am->SaveFeature(&pTempCode1,&pTempCode2,iris_im);
+                            }else{
+                                //质量不合格
+                                emit  e->am->sigIrisState(InteractionResultType::IrisEnrollPerformig,IrisPositionFlag::Quality);
+                            }
+
                         }
 
-
-
-
+                    }else{
+                        //带眼睛
+                        emit  e->am->sigIrisState(InteractionResultType::IrisEnrollGlassesExist,IrisPositionFlag::Unknown);
                     }
+                }else{
+                    //非双眼
+                    emit  e->am->sigIrisState(InteractionResultType::IrisEnrollSangleEye,IrisPositionFlag::Unknown);
                 }
+            }else{
+                //注册中
+              emit  e->am->sigIrisState(InteractionResultType::IrisEnrollPerformig,IrisPositionFlag::Unknown);
             }
         }
     }

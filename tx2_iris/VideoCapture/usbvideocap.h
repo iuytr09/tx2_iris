@@ -8,6 +8,7 @@ class UsbVideoCap : public QObject
 {
     Q_OBJECT
 
+
 public:
     /*! \brief 用于获得SingleTon实例，使用单例模式。
      *  \return SingleTon实例的引用。

@@ -31,6 +31,7 @@
 #include "Algorithm/face_algorith.h"
 #include "VideoCapture/usbvideocap.h"
 
+
 namespace Ui {
 class DialogIdentify;
 }
@@ -72,6 +73,7 @@ public slots:
     void LoginIdentResult(long personIndex, int flag);                      //管理员登陆识别结果
     void IdentFaceResult(PersonInfo info);         //考勤识别结果
 
+    void  slotFaceState(InteractionResultType,IrisPositionFlag);
 private:
 
     Ui::DialogIdentify *ui;

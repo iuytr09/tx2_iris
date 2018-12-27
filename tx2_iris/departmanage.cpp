@@ -29,6 +29,7 @@
 #include "ui_departmanage.h"
 
 
+
 DepartManage::DepartManage(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DepartManage),

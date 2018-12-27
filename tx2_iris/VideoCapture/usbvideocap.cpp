@@ -6,6 +6,7 @@
 #include <QMutex>
 
 
+
 QMutex UsbVideoCap::_face_v_mutex;
 UsbVideoCap* UsbVideoCap::_face_v_instance = NULL;
 

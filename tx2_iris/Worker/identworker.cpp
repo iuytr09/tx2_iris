@@ -6,6 +6,7 @@
 //IRIS_Algorith* am= IRIS_Algorith::GetInstance();
 //JD_IRIS* pJD_IRIS =am->GetJD_IRIS();
 
+
 IdentWorker::IdentWorker(QObject *parent) : QObject(parent),_isruning(false)
 {
 
@@ -64,9 +65,8 @@ void * IdentWorker::Indethread(void* arg){
                        delete[] pTempCode.pData;
                        pTempCode.pData =NULL;
 
-                   }else{
-//                       getError(nStatus);
                    }
+                   emit e->am->sigIrisState(InteractionResultType::IrisIdenPerforming,e->am->GetTip(EyeRect.at(0).EyeRect));
                }
 
                dQuality=0.0;
@@ -114,3 +114,6 @@ void * IdentWorker::Indethread(void* arg){
         }
     }
 }
+
+
+

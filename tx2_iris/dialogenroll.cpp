@@ -19,6 +19,7 @@
 #include "dialogenroll.h"
 #include "ui_dialogenroll.h"
 
+
 /*****************************************************************************
 *                         DialogEnroll构造函数
 *  函 数 名：DialogEnroll

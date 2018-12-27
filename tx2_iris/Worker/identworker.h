@@ -8,6 +8,7 @@
 #include<thread>
 
 
+
 class IRIS_Algorith;
 class JD_IRIS;
 class IdentWorker : public QObject

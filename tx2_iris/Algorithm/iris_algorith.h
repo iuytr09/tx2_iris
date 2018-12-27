@@ -23,6 +23,7 @@
 
 
 
+
 //编码信息结构体
 typedef struct IRIS_Mat_Quality
 {
@@ -33,20 +34,20 @@ typedef struct IRIS_Mat_Quality
 }st_IRIS_Mat_Quality;
 
 
-//位置信息标志
-enum PromptFlag
-{
-    IRIS_FAIL       =-1,//shibai
-    IRIS_SUCCESS    = 0, //chenggong
-    IRIS_Pos_Far			=	1,	//位置偏远
-    IRIS_Pos_Near			=	2,  //位置偏近
-    IRIS_Pos_Left			=	3,  //位置偏左
-    IRIS_Pos_Right			=	4,  //位置偏右
-    IRIS_Pos_Up				=	5,  //位置偏上
-    IRIS_Pos_Down			=	6,  //位置偏下
-    IRIS_Pos_OK				=	7  //位置合适
-    //Unknown         =   8  //位置未知，不用提示
-};
+////位置信息标志
+//enum PromptFlag
+//{
+//    IRIS_FAIL       =-1,//shibai
+//    IRIS_SUCCESS    = 0, //chenggong
+//    IRIS_Pos_Far			=	1,	//位置偏远
+//    IRIS_Pos_Near			=	2,  //位置偏近
+//    IRIS_Pos_Left			=	3,  //位置偏左
+//    IRIS_Pos_Right			=	4,  //位置偏右
+//    IRIS_Pos_Up				=	5,  //位置偏上
+//    IRIS_Pos_Down			=	6,  //位置偏下
+//    IRIS_Pos_OK				=	7  //位置合适
+//    //Unknown         =   8  //位置未知，不用提示
+//};
 
 /*****************************************************************************
 *                        类
@@ -131,8 +132,9 @@ public:
     bool SaveFeature(JD_IRIS_TEMPLATE* l,JD_IRIS_TEMPLATE* r,IRIS_Mat_Quality im);
     void codeCompareL(JD_IRIS_TEMPLATE* source);
     void codeCompareR(JD_IRIS_TEMPLATE* source);
-    void SendIdentState(int state);
+    //void SendIdentState(int state);
     void SendEnrollState(int state);
+   IrisPositionFlag GetTip(cv::Rect ret);
 public slots:
 
     void start_Enroll();
@@ -149,12 +151,15 @@ private:
 
 signals:
 
-    //信号
-    void sigEnrollSuccess(int p);
-    void sigIdentifySuccess(int state);
-    void sigIdentifyLoginSuccess(PersonInfo p);
+    sigIrisState(InteractionResultType,IrisPositionFlag);
+    sigIdentSucsses(PersonInfo p);
 
-    void sigStatus(int type,QString msg);//type 1 hong se ;2 lv se  ; msg tishi
+    //信号
+//    void sigEnrollSuccess(int p);
+//    void sigIdentifySuccess(int state);
+//    void sigIdentifyLoginSuccess(PersonInfo p);
+
+//    void sigStatus(int type,QString msg);//type 1 红色 ;2 绿色  ; msg 提示信息
 
 private:
     JD_IRIS* _pJD_IRIS;

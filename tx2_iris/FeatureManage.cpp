@@ -22,6 +22,7 @@ const char * c_filename_iris_format="./IrisPath/EnrollImage/Eye/iris_%d_%d.jpg";
 const char * c_filename_face_format="./FacePath/EnrollImage/Eye/iris_%d_%s.jpg";
 
 
+
 /*****************************************************************************
 *                         初始化参数
 *  函 数 名：InitParam

@@ -28,6 +28,7 @@ namespace Ui {
 class SysSettings;
 }
 
+
 class SysSettings : public QDialog
 {
     Q_OBJECT

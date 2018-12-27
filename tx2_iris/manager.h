@@ -25,6 +25,7 @@ namespace Ui {
 class Manager;
 }
 
+
 class Manager : public QWidget
 {
     Q_OBJECT

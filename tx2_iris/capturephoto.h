@@ -25,6 +25,7 @@
 void *GetFacePhoto(void* arg);
 
 
+
 namespace Ui {
 class CapturePhoto;
 }

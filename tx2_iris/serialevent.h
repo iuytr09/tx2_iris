@@ -11,3 +11,4 @@ public:
 signals:
     void GetICCrad(QString);
 };
+

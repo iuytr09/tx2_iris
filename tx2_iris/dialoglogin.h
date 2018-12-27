@@ -29,6 +29,7 @@ namespace Ui {
 class DialogLogin;
 }
 
+
 class DialogLogin : public QDialog
 {
     Q_OBJECT

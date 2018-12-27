@@ -128,7 +128,7 @@
           <string notr="true">color:rgb(0, 0, 0)</string>
          </property>
          <property name="text">
-          <string>人员信息</string>
+          <string>人员信息 </string>
          </property>
          <property name="checked">
           <bool>false</bool>

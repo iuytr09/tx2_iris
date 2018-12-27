@@ -28,6 +28,7 @@
 
 
 
+
 CapturePhoto::CapturePhoto(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CapturePhoto)//,

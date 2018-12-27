@@ -25,6 +25,7 @@
 #include <QDir>
 
 
+
 #include "detailpersoninfo.h"
 #include "ui_detailpersoninfo.h"
 #include "departmanage.h"

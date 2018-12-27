@@ -28,6 +28,7 @@ class Shutdown;
 class Shutdown : public QDialog
 {
     Q_OBJECT
+
     
 public:
     explicit Shutdown(QWidget *parent = 0);

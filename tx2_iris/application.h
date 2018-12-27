@@ -33,4 +33,5 @@ private slots:
 private :
     QTimer *timer;
 };
+
 #endif // APPLICATION_H

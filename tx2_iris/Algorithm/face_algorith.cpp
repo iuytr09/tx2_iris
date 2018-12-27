@@ -5,6 +5,7 @@
 #include<QSqlError>
 #include<QVariant>
 #include "dbconnection.h"
+#include "../jdFace_sdk_2.0.0/visi_error.h"
 
 //静态成员变量初始化。
 QMutex Face_Algorith::_face_alg_mutex;
@@ -103,9 +104,7 @@ bool Face_Algorith::SaveFeature(std::vector<float> &feat,cv::Mat im,cv::Mat reg_
     query.bindValue(":depart_name", _user.depart_name);
 
     QByteArray array;
-
-    //int l=sizeof(feat); // 4*4 = 16 (一个float占4个字节)
-    int len_fVar =  4*feat.size();//
+    int len_fVar =  4*feat.size();
     array.resize(len_fVar);
     memcpy(array.data(), &feat[0], len_fVar);
 
@@ -121,7 +120,7 @@ bool Face_Algorith::SaveFeature(std::vector<float> &feat,cv::Mat im,cv::Mat reg_
     {
         QMessageBox::warning(NULL,tr("数据库存储人脸信息失败"),query.lastError().text());
     }else{
-        std::cout<<"存储ren lian te zheng 信息成功!!"<<std::endl;
+        std::cout<<"存储人脸特征信息成功!!"<<std::endl;
     }
     //存储人脸图像
     _imagemanager.SaveFaceImage(_user.id,im,reg_face);
@@ -219,6 +218,16 @@ void Face_Algorith::SetNoWork(){
 *  函 数 名： CodeCompare
 *  功    能： 特征比对函数
 *  说    明：
+* 防伪阈值： 0.5
+*   识别阈值-
+*   ---------------------------------------------
+*   阈值       误识率        通过率
+*   ---------------------------------------------
+*   1.1367       0.0001       0.9999
+*   1.0819       0.00001      0.9997
+*   1.0335       0.000001     0.9984
+*   0.9738       0.0000001    0.9937
+*   建议识别阈值0.9738                  目前设置0.3
 *  参    数：
 *  返 回 值：
 *  创 建 人：liuzhch
@@ -248,7 +257,40 @@ void Face_Algorith::CodeCompare(std::vector<float> source){
         _user.depart_name = record._depart_name;
         emit sigIdentSucsses(_user);//识别成功！
     }else{
-        emit sigIdentState(-9,face_box);//识别失败！
+        emit sigFaceState(InteractionResultType::FaceIdenFailed,IrisPositionFlag::Unknown);
 
     }
 }
+
+
+/*****************************************************************************
+*                        函数
+*  函 数 名：GetTip
+*  功    能： 获取提示信息
+*  说    明：
+*  参    数：
+*  返 回 值：
+*  创 建 人：liuzhch
+*  创建时间：2018-12-25
+*  修 改 人：
+*  修改时间：
+*****************************************************************************/
+IrisPositionFlag Face_Algorith::GetTip(int ret){
+   switch (ret) {
+    case ERR_FACE_LOST:
+        return IrisPositionFlag::Unknown;
+    case ERR_FACE_POSE_WRONG:
+        return IrisPositionFlag::POSEWRONG;
+    case ERR_FACE_MOTION_BLUR:
+        return IrisPositionFlag::Quality;
+    case ERR_FACE_TOO_FAR:
+        return IrisPositionFlag::Far;
+    case ERR_FACE_TOO_NEAR:
+        return IrisPositionFlag::Near;
+   case ERR_NOFACE:
+       return IrisPositionFlag::Unknown;
+    default:
+        return IrisPositionFlag::Unknown;
+    }
+    return IrisPositionFlag::Unknown;
+ }
