@@ -153,7 +153,7 @@ signals:
 
     sigIrisState(InteractionResultType,IrisPositionFlag);
     sigIdentSucsses(PersonInfo p);
-
+    sigBoxsChanged(std::vector<st_EYE_LOC_INFO>  box);//IrisPositionFlag flag,
     //信号
 //    void sigEnrollSuccess(int p);
 //    void sigIdentifySuccess(int state);

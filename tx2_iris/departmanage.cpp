@@ -39,7 +39,7 @@ DepartManage::DepartManage(QWidget *parent) :
 
     //隐藏对话框标题栏及对话框位置调整和背景填充
     setWindowFlags(Qt::FramelessWindowHint);
-    setGeometry(QRect(0, 0, 800, 600));
+    //setGeometry(QRect(0, 0, 800, 600));
     //setBackgroundColor(QColor(242,241,240));
 
 

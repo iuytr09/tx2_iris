@@ -75,9 +75,9 @@ DialogIdentify::DialogIdentify(QWidget *parent) :
 
     if(connect(_pUsbVideoCap,SIGNAL(OnUpdateImage(cv::Mat)),this,SLOT(slotImageUpdate(cv::Mat))))
     {
-        std::cout<<"guan lian chenggong!"<<std::endl;
+        std::cout<<"摄像头关联成功!"<<std::endl;
     }else{
-        std::cout<<"guan lian shibai!"<<std::endl;
+        std::cout<<"摄像头关联!"<<std::endl;
     }
 }
 
@@ -90,6 +90,8 @@ DialogIdentify::~DialogIdentify()
 }
 
 void DialogIdentify::IdentFaceResult(PersonInfo info){
+
+    //处理人脸识别成功   to do
     ui->labStatu->setText(info.name + " 人脸识别成功!");
 }
 
@@ -106,6 +108,7 @@ void DialogIdentify::IdentFaceResult(PersonInfo info){
 *  修改时间：
 *****************************************************************************/
 void DialogIdentify::updateIdentState(int state, std::vector<std::vector<float>> face_boxs){
+
     _top_im.fill(0);
 
     QPainter painter(&_top_im);
@@ -163,10 +166,16 @@ void DialogIdentify::updateIdentState(int state, std::vector<std::vector<float>>
 void DialogIdentify::slotFaceState(InteractionResultType ret,IrisPositionFlag flag){
     std::cout<<"InteractionResultType:"<<ret<<", IrisPositionFlag:"<<flag<<std::endl;
 
-    //1\ kong zhi hong wei deng
-    //2\ kongzhi hong mo shi bie
+    //1\ 控制红外灯
+    
+    //2\ 控制虹膜摄像头开启和关闭
 
 }
+void DialogIdentify::slotBoxsChanged(std::vector<st_EYE_LOC_INFO>  box){
+
+}
+
+
 /*****************************************************************************
 *                        开始识别
 *  函 数 名： StartIdent
@@ -182,7 +191,7 @@ void DialogIdentify::slotFaceState(InteractionResultType ret,IrisPositionFlag fl
 void DialogIdentify::StartAttendIdent()
 {
 
-    //ren lian shi bie
+    //人脸识别
     _pFaceAlgorith->SetIdentifyWork();
 
 
@@ -236,26 +245,12 @@ void DialogIdentify::StartLoginIdent()
 *  修 改 人：
 *  修改时间：
 *****************************************************************************/
-void DialogIdentify::IdentResult(int flag)
+void DialogIdentify::IdentIrisResult(PersonInfo p)
 {
-    if(flag==-1)
-    {
-        ui->labStatu->setText(QString::fromUtf8("识别失败"));
-        _identResultState = FailedState;
-    }
-    else if(flag == 0)
-    {
 
-        ui->labStatu->setText(QString::fromUtf8("识别成功！"));
-        _identResultState = SuccessState;
-    }
-    else
-    {
-        _identResultState = ContinueState;
-
-    }
+    ui->labStatu->setText(p.name +QString::fromUtf8(":识别成功！"));
+    _identResultState = SuccessState;
 }
-
 
 /*****************************************************************************
 *                        显示识别结果函数

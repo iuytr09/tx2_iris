@@ -69,9 +69,8 @@ Enroll::Enroll(QWidget *parent) :
 
     setWindowFlags(Qt::CustomizeWindowHint);
     setWindowFlags(Qt::FramelessWindowHint);
-    setGeometry(QRect(0, 0, 800, 600));
+    //setGeometry(QRect(0, 0, 800, 600));
 
-//    qRegisterMetaType<LRSucFailFlag>("LRSucFailFlag");
     qRegisterMetaType<IrisPositionFlag>("IrisPositionFlag");
 
     _dialogEnroll = new DialogEnroll(this);
@@ -79,20 +78,22 @@ Enroll::Enroll(QWidget *parent) :
 
     _pirisA=IRIS_Algorith::GetInstance();
 
-    connect(_pirisA,SIGNAL(sigEnrollSuccess(int)),this,SLOT(slotEnrollSuccess(int)));
+    connect(_pirisA,SIGNAL(sigIrisState(InteractionResultType,IrisPositionFlag)),this,SLOT(slotEnrollSuccess(InteractionResultType,IrisPositionFlag)));
 
     _frameNum = 0;
     _captureImageTimerId = this->startTimer(1000);
 }
 
 
- void Enroll::slotEnrollSuccess(int state)
+ void Enroll::slotEnrollSuccess(InteractionResultType type,IrisPositionFlag flag)
  {
-     if(state==0){
+     if(type==InteractionResultType::IrisEnrollSuccess){
           ui->labtipMsg->setText(QString("%1 zhu ce cheng gong!").arg(_personInfo.name));
           ui->btnSaveEnrollResult->setEnabled(true);
-     }else{
+     }else if(type==InteractionResultType::IrisEnrollFailed){
           ui->labtipMsg->setText(QString("%1 zhu ce shi bai!").arg(_personInfo.name));
+     }else{
+          ui->labtipMsg->setText(QString("%1 zhu ce zhong...!").arg(_personInfo.name));
      }
 
 
@@ -114,9 +115,7 @@ Enroll::Enroll(QWidget *parent) :
 Enroll::~Enroll()
 {
     _capImgFlag = false;
-   // _capImgThread.join();
-     disconnect(_pirisA,SIGNAL(sigEnrollSuccess(int)),this,SLOT(slotEnrollSuccess(int)));
- //   delete _enrollAlgApi;
+     disconnect(_pirisA,SIGNAL(sigIrisState(InteractionResultType,IrisPositionFlag)),this,SLOT(slotEnrollSuccess(InteractionResultType,IrisPositionFlag)));
     delete ui;
 }
 

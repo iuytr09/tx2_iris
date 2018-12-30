@@ -79,45 +79,11 @@ public:
     }
 
     IrisPositionFlag GetTip(int ret);
-private:
-
-
-//    //人机交互结果类型
-//    enum InteractionResultType
-//    {
-//        IrisEnrollSuccess,  //注册成功
-//        IrisEnrollFailed,   //注册失败
-//        IrisEnrollPerformig,//注册中
-//        IrisIdenSuccess,    //识别成功
-//        IrisIdenFailed,     //识别失败
-//        IrisIdenKeepLastStatus,//保存识别上一次结果状态，只界面显示，不播放语音
-//        IrisIdenPerforming, //识别中
-//        FaceEnrollSuccess,  //注册成功
-//        FaceEnrollFailed,   //注册失败
-//        FaceEnrollPerformig,//注册中
-//        FaceIdenSuccess,    //识别成功
-//        FaceIdenFailed,     //识别失败
-//        FaceIdenKeepLastStatus,//保存识别上一次结果状态，只界面显示，不播放语音
-//        FaceIdenPerforming, //识别中
-//        ResultUnknown   //结果未知或者目前没有结果
-//    };
-//    //位置信息标志
-//    enum IrisPositionFlag
-//    {
-//        Far				=	0,	//位置偏远
-//        Near			=	1,  //位置偏近
-//        Left			=	2,  //位置偏左
-//        Right			=	3,  //位置偏右
-//        Up				=	4,  //位置偏上
-//        Down			=	5,  //位置偏下
-//        OK				=	6,  //位置合适
-//        Unknown         =   7   //位置未知，不用提示
-//    };
 signals:
 
     sigFaceState(InteractionResultType,IrisPositionFlag);
     sigIdentSucsses(PersonInfo info);
-//    sigEnrollState(int state,std::vector<float> &face_box, cv::Mat &out_face);
+    sigBoxsChanged(IrisPositionFlag flag,std::vector<float> &face_box, cv::Mat &out_face);
 //    sigIdentState(int, std::vector<std::vector<float>>);
 public slots:
 

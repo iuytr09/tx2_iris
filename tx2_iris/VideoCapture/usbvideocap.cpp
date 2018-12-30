@@ -77,6 +77,11 @@ void* UsbVideoCap::CapImgThread(void* arg)
         }
     }
 
+    //设置摄像头分辨率
+    cap.set(CV_CAP_PROP_FRAME_WIDTH, 1920.0);//设置摄像头采集图像分辨率
+    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 1440.0);
+
+
     Mat frame;
 
     bool stop = false;

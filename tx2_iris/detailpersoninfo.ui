@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>704</width>
+    <height>445</height>
    </rect>
   </property>
   <property name="font">
@@ -568,7 +568,7 @@
         </font>
        </property>
        <property name="text">
-        <string>renlian采集</string>
+        <string>人脸采集</string>
        </property>
        <property name="icon">
         <iconset>

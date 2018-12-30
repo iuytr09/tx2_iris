@@ -65,9 +65,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //connect(_pAlgorith,SIGNAL(sigEnrollSuccess(bool)),this,SLOT(iris_enroll_success(PersonInfo)));
 
     _pIrisVideo =IrisVideo::GetInstance();
-
     IrisVideo::GetInstance()->Run();
-
     //hong mo she xiang tou
     connect(_pIrisVideo,SIGNAL(sigFramed(cv::Mat)),this,SLOT(iris_image(cv::Mat)));
 
@@ -89,8 +87,7 @@ MainWindow::MainWindow(QWidget *parent) :
     _layoutIdentify->setMargin(0);
     ui->pageIdentify->setLayout(_layoutIdentify);
     connect(_ident,SIGNAL(sigLoginSucceed(int)),this,SLOT(login_result(bool)));
-    connect(_pAlgorith,SIGNAL(sigIdentifySuccess(int)),_ident,SLOT(IdentResult(int)));
-
+    connect(_pAlgorith,SIGNAL(sigIdentSucsses(PersonInfo)),_ident,SLOT(IdentIrisResult(PersonInfo)));
 
 
     //系统管理界面
@@ -157,11 +154,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //显示识别界面
     go_identify_action();
-
     connect(&drawEvent,SIGNAL(sigDrawIdent(cv::Mat)),this,SLOT(face_image(cv::Mat)));
-
-
-
 }
 
 

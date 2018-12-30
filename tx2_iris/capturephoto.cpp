@@ -38,7 +38,7 @@ CapturePhoto::CapturePhoto(QWidget *parent) :
 
     //去除对话框标题栏，坐标重定位和填充背景
     setWindowFlags(Qt::FramelessWindowHint);
-    setGeometry(QRect(0, 0, 800, 600));
+  //  setGeometry(QRect(0, 0, 800, 600));
     //setBackgroundColor(QColor(242,241,240));
 
 

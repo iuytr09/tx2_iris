@@ -84,7 +84,7 @@ public:
     void IrisImageUpdate(QImage im); //hong mo
 private slots:
 
-    void slotEnrollSuccess(int state);
+    void slotEnrollSuccess(InteractionResultType, IrisPositionFlag);
     void on_btnEnroll_clicked();
 
     void on_btnEnrollReturn_clicked();

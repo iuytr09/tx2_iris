@@ -22,7 +22,6 @@
 #include<qdebug.h>
 #include <omp.h>
 #include<QSqlQuery>
-//#include<stdlib.h>
 #include<QMessageBox>
 #include<QSqlError>
 #include<string.h>
@@ -79,11 +78,6 @@ IRIS_Algorith::IRIS_Algorith():_isOK(false),_isSetPerson(false)
 
                 //chu shi hua tu xiang
                 _imagemanager.InitParam();
-
-                //   //ce shi shu ju ku cao zuo
-                //    QSqlTableModel *_pIrisDataModel = new QSqlTableModel(NULL);//QSqlTableModel
-                //    _pIrisDataModel->setTable("irisdata");
-                //    _pIrisDataModel->select();
 
                 //ce shi shu ju ku cao zuo
                 for(int i=0;i<_pIrisDataModel->rowCount();i++){
@@ -661,10 +655,10 @@ void IRIS_Algorith::codeCompareR(JD_IRIS_TEMPLATE* source){
         _recogUser.id = record.value("uid").toInt();
         _recogUser.name = record.value("name").toString();
         _recogUser.depart_name = record.value("depart_name").toString();
-        emit sigIrisState(InteractionResultType::IrisIdenSuccess,IrisPositionFlag::Unknown);
+        emit sigIdentSucsses(_recogUser);
 
     }else{
-               emit sigIrisState(InteractionResultType::IrisIdenFailed,IrisPositionFlag::Unknown);
+        emit sigIrisState(InteractionResultType::IrisIdenFailed,IrisPositionFlag::Unknown);
     }
 }
 
@@ -677,7 +671,7 @@ void IRIS_Algorith::codeCompareR(JD_IRIS_TEMPLATE* source){
 //*  返 回 值：
 //*  创 建 人：liuzhch
 //*  创建时间：2018-12-05
-//*  修 改 人：
+//*  修 改 人：slotBoxsChanged
 //*  修改时间：
 //*****************************************************************************/
 //void IRIS_Algorith::SendIdentState(int state){
@@ -691,7 +685,7 @@ void IRIS_Algorith::codeCompareR(JD_IRIS_TEMPLATE* source){
 //*  说    明：
 //*  参    数：
 //*  返 回 值：
-//*  创 建 人：liuzhch
+//*  创 建 人：liuzhchslotBoxsChanged
 //*  创建时间：2018-12-05
 //*  修 改 人：
 //*  修改时间：
@@ -713,8 +707,8 @@ void IRIS_Algorith::codeCompareR(JD_IRIS_TEMPLATE* source){
 *  修改时间：
 *****************************************************************************/
 IrisPositionFlag IRIS_Algorith::GetTip(cv::Rect ret){
-    int far = 20;//小 远
-    int near = 120;//大  近
+    int far = 160;//小 远
+    int near = 240;//大  近
     int left =50;
     int right = 3000;
     int up = 50;

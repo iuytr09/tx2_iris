@@ -29,6 +29,7 @@
 #include "FeatureManage.h"
 #include "interaction.h"
 #include "Algorithm/face_algorith.h"
+#include "Algorithm/iris_algorith.h"
 #include "VideoCapture/usbvideocap.h"
 
 
@@ -69,11 +70,12 @@ public slots:
     void StartAttendIdent();       //开始考勤识别
     void StartLoginIdent();        //开始管理员登陆识别
 
-    void IdentResult(int flag);         //考勤识别结果
+    void IdentIrisResult(PersonInfo p);         //考勤识别结果
     void LoginIdentResult(long personIndex, int flag);                      //管理员登陆识别结果
     void IdentFaceResult(PersonInfo info);         //考勤识别结果
 
     void  slotFaceState(InteractionResultType,IrisPositionFlag);
+    void slotBoxsChanged(std::vector<st_EYE_LOC_INFO>  box);
 private:
 
     Ui::DialogIdentify *ui;
@@ -99,7 +101,6 @@ private:
 
     //人机交互类
  //   static Interaction *_identInteraction;
- //   LRIrisClearFlag  _irisClearFlag;
     IdentResultState  _identResultState;           //识别结果
     QTimer *_timerStartIdent;                      //识别成功或失败时显示框显示1s钟
 
