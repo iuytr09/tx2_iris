@@ -26,7 +26,6 @@
 #include <mutex>
 #include <thread>
 #include <condition_variable>
-#include "FeatureManage.h"
 #include "interaction.h"
 #include "Algorithm/face_algorith.h"
 #include "Algorithm/iris_algorith.h"

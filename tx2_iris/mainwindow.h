@@ -43,7 +43,6 @@ namespace Ui {
 class MainWindow;
 }
 
-//class
 
 class MainWindow : public QMainWindow
 {
