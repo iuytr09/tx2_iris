@@ -46,7 +46,18 @@ SOURCES += main.cpp\
     Worker/enrollworker.cpp \
     Worker/identworker.cpp \
     Algorithm/face_algorith.cpp \
-    Worker/faceworker.cpp
+    Worker/faceworker.cpp \
+    SerialMuxdemux/serialmuxdemux.cpp \
+    serial/source/asyncserial.cpp \
+    serial/source/asyncserialbase.cpp \
+    serial/source/basicserial.cpp \
+    serial/source/basictypes.cpp \
+    serial/source/cserial.cpp \
+    serial/source/innercommon.cpp \
+    serial/source/serialbase.cpp \
+    serial/source/serialframe.cpp \
+    serial/source/syncserial.cpp \
+    serial/source/syncserialbase.cpp
 
 
 
@@ -90,7 +101,18 @@ HEADERS  += mainwindow.h \
     Algorithm/face_algorith.h \
     ../jdFace_sdk_2.0.0/visi_error.h \
     ../jdFace_sdk_2.0.0/visi_face.h \
-    Worker/faceworker.h
+    Worker/faceworker.h \
+    SerialMuxdemux/serialmuxdemux.h \
+    serial/include/asyncserial.h \
+    serial/include/asyncserialbase.h \
+    serial/include/basicserial.h \
+    serial/include/basictypes.h \
+    serial/include/cserial.h \
+    serial/include/innercommon.h \
+    serial/include/serialbase.h \
+    serial/include/serialframe.h \
+    serial/include/syncserial.h \
+    serial/include/syncserialbase.h
 
 
     messagebox.h \
