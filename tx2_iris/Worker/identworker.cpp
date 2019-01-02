@@ -39,7 +39,11 @@ void * IdentWorker::Indethread(void* arg){
            std::vector<st_EYE_LOC_INFO> EyeRect;
            JD_IRIS_STATUS nStatus = e->pJD_IRIS->JD_IRIS_EyeLocation(im, EyeRect);
 
+
+
            if (JD_STATUS_OK == nStatus){
+
+              emit  e->am->sigBoxsChanged(EyeRect);
                double dQuality;
                if (EyeRect.size()>0){
                    //left

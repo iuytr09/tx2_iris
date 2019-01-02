@@ -41,7 +41,7 @@ DialogEnroll::DialogEnroll(QWidget *parent) :
 
     setWindowFlags(Qt::CustomizeWindowHint);
     setWindowFlags(Qt::FramelessWindowHint);
-    setGeometry(QRect(0, 0, 800, 600));
+   // setGeometry(QRect(0, 0, 800, 600));
     //setBackgroundColor(QColor(242,241,240));
 }
 

@@ -29,11 +29,9 @@ SOURCES += main.cpp\
     application.cpp \
     messagebox.cpp \
     messagebox.h \
-    simplepersoninfo.cpp \
     departmanage.cpp \
     capturephoto.cpp \
     network.cpp \
-    serialevent.cpp \
     interaction.cpp \
     dbconnection.cpp \
     Common/common.cpp \
@@ -77,14 +75,12 @@ HEADERS  += mainwindow.h \
     application.h\
     datamanage.h \
     messagebox.h \
-    simplepersoninfo.h \
     departmanage.h \
     capturephoto.h \
     #../AlgApi/SRC/AlgApi.h\
     interaction.h \
     network.h\
    # ../bin/serialmuxdemux.h \
-    serialevent.h \
     dbconnection.h \
     Common/common.h \
     ../JD_IRIS_API/include/jd_iris.h \
@@ -131,7 +127,6 @@ FORMS    += mainwindow.ui \
     datamanage.ui \
     shutdown.ui \
     messagebox.ui \
-    simplepersoninfo.ui \
     departmanage.ui \
     capturephoto.ui
 INCLUDEPATH +=/usr/include/opencv2
