@@ -3,10 +3,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
+
 //静态成员变量初始化。
 QMutex IrisVideo::_iris_v_mutex;
 IrisVideo* IrisVideo::_iris_v_instance = NULL;
-
 
 
 static IrisVideo *IrisVideo::GetInstance()
@@ -91,6 +91,12 @@ IrisVideo::IrisVideo(QObject *parent) : QObject(parent),_nBufferNum(5),_hDevice(
                         printf("Set Exposure time Failed ret= %d\n",status);
                     }
 
+                    //she zhe hong wai
+                    this->gpio_out = 38;
+                    gpio_export(this->gpio_out);
+                    gpio_set_dir(this->gpio_out, "out");
+                    gpio_set_value(this->gpio_out, LOW);
+
                 }
             }
         }else{
@@ -114,6 +120,7 @@ IrisVideo::~IrisVideo()
 
 }
 
+
 /*****************************************************************************
 *                        函数
 *  函 数 名： irisStopStreamOff
@@ -130,6 +137,8 @@ void IrisVideo::irisStopStreamOff()
 {
 
     if(_iris_v_instance->_hDevice!=NULL){
+        //ting zhi hong wai
+         gpio_set_value(this->gpio_out, LOW);
         //停止采集
         _iris_v_instance->_status = GxStreamOff(_iris_v_instance->_hDevice);
         printf("GxStreamOff Failed ret= %d\n",_iris_v_instance->_status);
@@ -153,6 +162,8 @@ void IrisVideo::irisStopStreamOff()
 void IrisVideo::irisGxStreamOn()
 {
     if(_iris_v_instance->_hDevice!=NULL){
+        //kai qi hong wei
+         gpio_set_value(this->gpio_out, HIGH);
         //开始采集
         _iris_v_instance->_status = GxStreamOn(_iris_v_instance->_hDevice);
         printf("GxStreamOn Failed ret= %d\n",_iris_v_instance->_status);

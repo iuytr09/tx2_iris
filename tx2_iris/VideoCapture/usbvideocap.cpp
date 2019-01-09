@@ -79,8 +79,13 @@ void* UsbVideoCap::CapImgThread(void* arg)
 
     //设置摄像头分辨率
     cap.set(CV_CAP_PROP_FRAME_WIDTH, 1920.0);//设置摄像头采集图像分辨率
-    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 1440.0);
+    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 1080.0);
 
+    std::cout<<"set CV_CAP_PROP_FPS:"<<cap.set( CV_CAP_PROP_FPS, 10)<<std::endl;
+
+      std::cout<<"CV_CAP_PROP_FPS:"<<cap.get(CV_CAP_PROP_FPS)<<std::endl;
+  std::cout<<"CV_CAP_PROP_FRAME_WIDTH:"<<cap.get(CV_CAP_PROP_FRAME_WIDTH)<<std::endl;
+  std::cout<<"CV_CAP_PROP_FRAME_HEIGHT:"<<cap.get(CV_CAP_PROP_FRAME_HEIGHT)<<std::endl;
 
     Mat frame;
 

@@ -55,9 +55,11 @@ public:
 
     //zhu ce qian xu yao she zhi zhu ce yong hu
     void inline SetPersonInfo(int id,QString name,QString departname){
+//        std::cout<<"id : "<<id<<" name :"<<name.toStdString()<<std::endl;
         _user.id=id;
         _user.name = name;
         _user.depart_name = departname;
+        std::cout<<"id : "<< _user.id<<" name :"<<_user.name.toStdString()<<std::endl;
         _isSetPerson= true;
     }
 

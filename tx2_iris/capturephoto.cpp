@@ -76,8 +76,11 @@ void CapturePhoto::slotImageUpdate(cv::Mat im)
 {
     QImage img = cvMat2QImage(im);
     if (!img.isNull()){
-
-        ui->labFaceImageStream->setPixmap(QPixmap::fromImage(img, Qt::AutoColor));
+        QPixmap pixmap = QPixmap::fromImage(img);
+        pixmap.scaled(ui->labFaceImageStream->size(), Qt::KeepAspectRatio);
+        ui->labFaceImageStream->setScaledContents(true);
+        ui->labFaceImageStream->setPixmap(pixmap);
+       // ui->labFaceImageStream->setPixmap(QPixmap::fromImage(img, Qt::AutoColor));
     }
 }
 

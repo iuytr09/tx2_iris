@@ -71,6 +71,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //设置管理员登陆
     _suspendbar = new SuspendBar(this);
+    _suspendbar->setFixedWidth(this->width());
     _suspendbar->hide();
     connect(_suspendbar,SIGNAL(sigAdminLogin()),this,SLOT(on_login_for_admin_action_triggered()));
     connect(_suspendbar,SIGNAL(sigIrisLogin()),this,SLOT(go_irislogin_action()));

@@ -41,6 +41,10 @@ public:
     ~Interaction();
     void PlayInteractionSound(IN InteractionResultType resultType, IN IrisPositionFlag irisPositionFlag);        //播放人机交互语音提示，靠近、靠远等
     void ClearResult();
+
+
+    void OpenRedLED();
+    void CloseRedLED();
 private:
     Interaction();
     Interaction(const Interaction&);//禁止拷贝赋值
@@ -58,6 +62,9 @@ private:
 
     bool _infraredLEDOnFlag;             //红外灯是否开启标志
     QTimer *_timerForInfraredLED;       //红外灯点亮状态定时器
+
+
+
 
 };
 

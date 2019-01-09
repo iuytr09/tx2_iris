@@ -11,6 +11,8 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include<thread>
+//hong wai deng
+#include<GPIO/GPIOSet.h>
 
 using namespace cv;
 using namespace std;
@@ -93,6 +95,11 @@ private:
     uint64_t _nBufferNum;
     CFps _objFps;
     volatile bool _stoped;
+
+
+    //gpio
+    int gpio_out;
+    int gpio_in;
 };
 
 

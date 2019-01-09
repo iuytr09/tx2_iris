@@ -17,7 +17,7 @@
 **
 *****************************************************************************/
 #pragma once
-#include "../../../common.h"
+#include "../../Common/common.h"
 
 
 const int E_SERIAL_BASE = -20000;                //串口错误码基准

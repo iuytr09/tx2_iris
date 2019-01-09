@@ -55,7 +55,9 @@ SOURCES += main.cpp\
     serial/source/serialbase.cpp \
     serial/source/serialframe.cpp \
     serial/source/syncserial.cpp \
-    serial/source/syncserialbase.cpp
+    serial/source/syncserialbase.cpp \
+    GPIO/GPIOSet.cpp \
+    enrollnew.cpp
 
 
 
@@ -108,7 +110,9 @@ HEADERS  += mainwindow.h \
     serial/include/serialbase.h \
     serial/include/serialframe.h \
     serial/include/syncserial.h \
-    serial/include/syncserialbase.h
+    serial/include/syncserialbase.h \
+    GPIO/GPIOSet.h \
+    enrollnew.h
 
 
     messagebox.h \
@@ -128,7 +132,8 @@ FORMS    += mainwindow.ui \
     shutdown.ui \
     messagebox.ui \
     departmanage.ui \
-    capturephoto.ui
+    capturephoto.ui \
+    enrollnew.ui
 INCLUDEPATH +=/usr/include/opencv2
 
 LIBS += -L/usr/local/lib/ \

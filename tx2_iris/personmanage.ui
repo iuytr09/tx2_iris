@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>497</width>
+    <width>506</width>
     <height>269</height>
    </rect>
   </property>
@@ -259,7 +259,7 @@
         </font>
        </property>
        <property name="text">
-        <string>注册虹膜 </string>
+        <string>注册</string>
        </property>
       </widget>
      </item>

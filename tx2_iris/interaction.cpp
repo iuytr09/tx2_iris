@@ -69,8 +69,10 @@ Interaction::Interaction()
 {
     _resultFlag = false;//初始化时没有结果
     s_sound = new QMediaPlayer();
-    s_sound->setMedia(QUrl::fromLocalFile("/home/nvidia/work/build-tx2_iris-Desktop-Debu/aaa.wav"));
+    s_sound->setMedia(QUrl::fromLocalFile("/home/nvidia/work/build-tx2_iris-Desktop-Debug/sounds/10.wav"));
 }
+
+
 
 Interaction::~Interaction()
 {
@@ -113,99 +115,103 @@ void Interaction::PlayInteractionSound(IN InteractionResultType resultType, IN I
     s_sound->play();
 
 
-////    qDebug()<<QDir::currentPath();
+    //1  qing yuan yi dian
 
-//    struct timeval tvSoundEnd;
-//    int durationTime = 0;//声音间隔
 
-//    if(s_updateTvStart)
-//    {
-//        //更新声音播放开始时间
-//        gettimeofday(&s_tvSoundStart,NULL);
-//        s_updateTvStart = false;
-//    }
 
-//    //获取当前时间
-//    gettimeofday(&tvSoundEnd,NULL);
-//    durationTime = tvSoundEnd.tv_sec - s_tvSoundStart.tv_sec;
+    ////    qDebug()<<QDir::currentPath();
 
-//    if( (durationTime < g_constSoundInterval) && (ResultUnknown == resultType) )
-//    {
-//        //当前时间与声音播放开始时间间隔太小，并且没有注册或识别结果，则不播放声音
-//        return;
-//    }
-//    else
-//    {
-//        //达到间隔时间，播放声音，将更新声音播放时间标志设为true
-//        s_updateTvStart = true;
-//    }
+    //    struct timeval tvSoundEnd;
+    //    int durationTime = 0;//声音间隔
 
-//    if(ResultUnknown == resultType)
-//    {
-//        switch(irisPositionFlag)
-//        {
-//        case Far:
-//            s_sound->setMedia(QUrl::fromLocalFile("./sounds/chs/010closer.wav"));
-//            break;
+    //    if(s_updateTvStart)
+    //    {
+    //        //更新声音播放开始时间
+    //        gettimeofday(&s_tvSoundStart,NULL);
+    //        s_updateTvStart = false;
+    //    }
 
-//        case Near:
-//           s_sound->setMedia(QUrl::fromLocalFile("./sounds/chs/018farther.wav"));
-//            break;
+    //    //获取当前时间
+    //    gettimeofday(&tvSoundEnd,NULL);
+    //    durationTime = tvSoundEnd.tv_sec - s_tvSoundStart.tv_sec;
 
-//        case Left:
-//            s_sound->setMedia(QUrl::fromLocalFile("./sounds/chs/104right.wav"));
-//            break;
+    //    if( (durationTime < g_constSoundInterval) && (ResultUnknown == resultType) )
+    //    {
+    //        //当前时间与声音播放开始时间间隔太小，并且没有注册或识别结果，则不播放声音
+    //        return;
+    //    }
+    //    else
+    //    {
+    //        //达到间隔时间，播放声音，将更新声音播放时间标志设为true
+    //        s_updateTvStart = true;
+    //    }
 
-//        case Right:
-//            s_sound->setMedia(QUrl::fromLocalFile("./sounds/chs/105left.wav"));
-//            break;
+    //    if(ResultUnknown == resultType)
+    //    {
+    //        switch(irisPositionFlag)
+    //        {
+    //        case Far:
+    //            s_sound->setMedia(QUrl::fromLocalFile("./sounds/chs/010closer.wav"));
+    //            break;
 
-//        case Up:
-//               s_sound->setMedia(QUrl::fromLocalFile("./sounds/chs/102down.wav"));
-//            break;
+    //        case Near:
+    //           s_sound->setMedia(QUrl::fromLocalFile("./sounds/chs/018farther.wav"));
+    //            break;
 
-//        case Down:
-//              s_sound->setMedia(QUrl::fromLocalFile("./sounds/chs/103up.wav"));
-//            break;
+    //        case Left:
+    //            s_sound->setMedia(QUrl::fromLocalFile("./sounds/chs/104right.wav"));
+    //            break;
 
-//        case OK:
-//           s_sound->setMedia(QUrl::fromLocalFile("./sounds/chs/100keep.wav"));
-//            break;
+    //        case Right:
+    //            s_sound->setMedia(QUrl::fromLocalFile("./sounds/chs/105left.wav"));
+    //            break;
 
-//        default:
-//            break;
-//        }
-//    }
-//    else
-//    {
-//        if((s_sound) && (IdenKeepLastStatus != resultType))
-//        {
-//            s_sound->stop();
-//        }
+    //        case Up:
+    //               s_sound->setMedia(QUrl::fromLocalFile("./sounds/chs/102down.wav"));
+    //            break;
 
-//        switch(resultType)
-//        {
-//        case EnrollSuccess:
-//            s_sound->setMedia(QUrl::fromLocalFile("./sounds/chs/003enrollsucc.wav"));
-//            break;
-//        case EnrollFailed:
-//            s_sound->setMedia(QUrl::fromLocalFile("./sounds/chs/006enrollstop.wav"));
-//            break;
-//        case IdenSuccess:
-//            s_sound->setMedia(QUrl::fromLocalFile("./sounds/chs/002idensucc.wav"));
-//            break;
-//        case IdenFailed:
-//            s_sound->setMedia(QUrl::fromLocalFile("./sounds/chs/005retry.wav"));
-//            break;
-//        default:
-//            break;
-//        }
+    //        case Down:
+    //              s_sound->setMedia(QUrl::fromLocalFile("./sounds/chs/103up.wav"));
+    //            break;
 
-//    }
+    //        case OK:
+    //           s_sound->setMedia(QUrl::fromLocalFile("./sounds/chs/100keep.wav"));
+    //            break;
 
-//    if((s_sound) && (false == _resultFlag) && (IdenKeepLastStatus != resultType))
-//    {
-//        s_sound->play();
-//    }
+    //        default:
+    //            break;
+    //        }
+    //    }
+    //    else
+    //    {
+    //        if((s_sound) && (IdenKeepLastStatus != resultType))
+    //        {
+    //            s_sound->stop();
+    //        }
+
+    //        switch(resultType)
+    //        {
+    //        case EnrollSuccess:
+    //            s_sound->setMedia(QUrl::fromLocalFile("./sounds/chs/003enrollsucc.wav"));
+    //            break;
+    //        case EnrollFailed:
+    //            s_sound->setMedia(QUrl::fromLocalFile("./sounds/chs/006enrollstop.wav"));
+    //            break;
+    //        case IdenSuccess:
+    //            s_sound->setMedia(QUrl::fromLocalFile("./sounds/chs/002idensucc.wav"));
+    //            break;
+    //        case IdenFailed:
+    //            s_sound->setMedia(QUrl::fromLocalFile("./sounds/chs/005retry.wav"));
+    //            break;
+    //        default:
+    //            break;
+    //        }
+
+    //    }
+
+    //    if((s_sound) && (false == _resultFlag) && (IdenKeepLastStatus != resultType))
+    //    {
+    //        s_sound->play();
+    //    }
 
 }

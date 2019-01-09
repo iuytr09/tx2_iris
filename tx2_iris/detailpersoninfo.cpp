@@ -31,11 +31,11 @@
 #include "departmanage.h"
 #include "Common/common.h"
 
-#include "serialevent.h"
+//#include "serialevent.h"
 #include"Algorithm/face_algorith.h"
 
 //串口封装事件
-SerialEvent se;
+//SerialEvent se;
 
 void RecvCardNum(const unsigned char* data, const int size)
 {
@@ -50,7 +50,7 @@ void RecvCardNum(const unsigned char* data, const int size)
         }
 
         printf("卡号: %s\n", val.toUtf8().data());
-        se.onGetICCardNum(val);
+    //    se.onGetICCardNum(val);
     }
 }
 
@@ -82,7 +82,7 @@ DetailPersonInfo::DetailPersonInfo(const PersonInfo& personInfo, QWidget *parent
 
 DetailPersonInfo::~DetailPersonInfo()
 {
-    Face_Algorith::GetInstance()->SetPersonInfo(0,"","");
+   // Face_Algorith::GetInstance()->SetPersonInfo(0,"","");
 
    // sm->ReleaseInstance();
     delete ui;
@@ -188,8 +188,8 @@ void DetailPersonInfo::initUI(bool modifyOpt)
 
 
     //隐藏对话框标题栏及对话框位置调整和背景填充
-    setWindowFlags(Qt::FramelessWindowHint);
-    setGeometry(QRect(0, 0, 800, 600));
+    //setWindowFlags(Qt::FramelessWindowHint);
+   // setGeometry(QRect(0, 0, 800, 600));
     //setBackgroundColor(QColor(242,241,240));
 
     setAttribute(Qt::WA_TranslucentBackground, false);
@@ -220,7 +220,7 @@ void DetailPersonInfo::initSigSlots()
     connect(ui->btnDeletePhoto, SIGNAL(clicked()), this, SLOT(slotDeletePhoto()));
     connect(ui->btnManageDepart,SIGNAL(clicked()), this, SLOT(slotManageDepart()));
     connect(&_capturePhoto, SIGNAL(sigImgaeCaptured(QImage)), this, SLOT(slotGetPhoto(QImage)));
-    connect(&se,SIGNAL(GetICCrad(QString)), this, SLOT(slotGetICCardNum(QString)));          //读取IC卡卡号槽函数
+    //connect(&se,SIGNAL(GetICCrad(QString)), this, SLOT(slotGetICCardNum(QString)));          //读取IC卡卡号槽函数
     connect(this, SIGNAL(sigLoadFaceImage()), this, SLOT(slotLoadFaceImage()));
 }
 
@@ -432,7 +432,7 @@ void DetailPersonInfo::slotCapturePhoto()
         QMessageBox::information(this, QString::fromUtf8("采集人脸图像"), QString::fromUtf8("请先输入人员姓名和工号"));
         return;
     }
-
+ //Face_Algorith::GetInstance()->SetPersonInfo(ui->txtIDNum->text().toInt(),ui->txtName->text(),ui->cmbDepart->currentText());
     //设置人脸图像人员信息
     _capturePhoto.setFileNameInfo(getFacePhotoName());
     _capturePhoto.exec();

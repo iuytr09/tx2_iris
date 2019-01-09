@@ -25,6 +25,7 @@
 #include<QMessageBox>
 #include<QSqlError>
 #include<string.h>
+#include<sys/time.h>
 ////#include<stdio.h>
 ///
 #include "dbconnection.h"
@@ -633,6 +634,8 @@ void IRIS_Algorith::codeCompareL(JD_IRIS_TEMPLATE* source){
 void IRIS_Algorith::codeCompareR(JD_IRIS_TEMPLATE* source){
 
     double dDist=1.0;
+    struct timeval tv,etv;
+    struct timezone tz,etz;
     QSqlRecord record;
     for(int i=0;i<_pIrisDataModel->rowCount();i++){
         double dtemp=1.0;
@@ -641,7 +644,13 @@ void IRIS_Algorith::codeCompareR(JD_IRIS_TEMPLATE* source){
         JD_IRIS_TEMPLATE* codeExist = new JD_IRIS_TEMPLATE();
         codeExist->nLength = datatemple.length();
         codeExist->pData = datatemple.data();
+        gettimeofday(&tv,&tz);
+
         _pJD_IRIS->JD_IRIS_CodeCompare(codeExist,source,dtemp);
+
+        gettimeofday(&etv,&etz);
+
+        std::cout<<"etv-tv"<<etv.tv_sec-tv.tv_sec<<std::endl;
         if(dtemp<dDist)
         {
             dDist = dtemp;

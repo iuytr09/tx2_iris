@@ -29,7 +29,7 @@
 
 
 
-//#include "interaction.h"
+#include "interaction.h"
 
 //#include "application.h"
 
@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
     a.setStyle("macintosh");
     a.installTranslator(&oTranslator);   //汉化消息框按钮
 
-//    Interaction::GetInteractionInstance()->PlayInteractionSound(InteractionResultType::EnrollSuccess,IrisPositionFlag::Far);
+    Interaction::GetInteractionInstance()->PlayInteractionSound(InteractionResultType::IrisEnrollSuccess,IrisPositionFlag::Far);
 
 //    if(!createConnection(NULL))      //创建数据库连接
 //    {
